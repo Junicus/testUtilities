@@ -1,16 +1,19 @@
-import * as React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
+import * as React from "react";
+import { Provider } from "react-redux";
+import { AppRouter } from "./AppRouter";
 
-import './custom.css'
+import "./custom.css";
 
-export default () => (
-    <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-    </Layout>
+import configureStore from "./store/configureStore";
+import { OidcProvider } from "redux-oidc";
+import userManager from "./store/auth/userManager";
+
+const store = configureStore();
+
+export const App = () => (
+  <Provider store={store}>
+    <OidcProvider store={store} userManager={userManager}>
+      <AppRouter />
+    </OidcProvider>
+  </Provider>
 );

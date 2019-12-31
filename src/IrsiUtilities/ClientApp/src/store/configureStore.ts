@@ -1,29 +1,26 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { History } from 'history';
-import { ApplicationState, reducers } from './';
+import { applyMiddleware, compose, createStore, Middleware } from "redux";
+import userManager from "./auth/userManager";
 
-export default function configureStore(history: History, initialState?: ApplicationState) {
-    const middleware = [
-        thunk,
-        routerMiddleware(history)
-    ];
+import { rootReducer } from "./rootReducer";
+import createOidcMiddleware from "redux-oidc";
 
-    const rootReducer = combineReducers({
-        ...reducers,
-        router: connectRouter(history)
-    });
+export default function configureStore() {
+  userManager.events.addSilentRenewError(function(error) {
+    console.error(`error while renewing the access token ${error}`);
+  });
+  const oidcMiddleware = createOidcMiddleware(userManager);
 
-    const enhancers = [];
-    const windowIfDefined = typeof window === 'undefined' ? null : window as any;
-    if (windowIfDefined && windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__) {
-        enhancers.push(windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__());
-    }
+  const middleware: Middleware[] = [oidcMiddleware];
+  const enhancers = [];
 
-    return createStore(
-        rootReducer,
-        initialState,
-        compose(applyMiddleware(...middleware), ...enhancers)
-    );
+  const windowIfDefined =
+    typeof window === "undefined" ? null : (window as any);
+  if (windowIfDefined && windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__) {
+    enhancers.push(windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__());
+  }
+
+  return createStore(
+    rootReducer,
+    compose(applyMiddleware(...middleware), ...enhancers)
+  );
 }

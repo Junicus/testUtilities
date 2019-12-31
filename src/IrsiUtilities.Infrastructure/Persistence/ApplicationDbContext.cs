@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.Options;
 using IrsiUtilities.Application.Common.Interfaces;
 using IrsiUtilities.Domain.Common;
+using IrsiUtilities.Domain.Entities;
 using IrsiUtilities.Infrastructure.Identity;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,10 @@ namespace IrsiUtilities.Infrastructure.Persistence
             _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
+
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<ElectricityInvoice> ElectricityInvoices { get; set; }
+        public DbSet<WaterInvoice> WaterInvoices { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

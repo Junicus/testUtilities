@@ -86,6 +86,191 @@
           }
         ]
       }
+    },
+    "/_configuration/{clientId}": {
+      "get": {
+        "tags": [
+          "OidcConfiguration"
+        ],
+        "operationId": "OidcConfiguration_GetClientRequestParameters",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Stores": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "operationId": "Stores_Get",
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoresVM"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Stores"
+        ],
+        "operationId": "Stores_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/WaterInvoices": {
+      "get": {
+        "tags": [
+          "WaterInvoices"
+        ],
+        "operationId": "WaterInvoices_Get",
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterInvoicesVM"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "WaterInvoices"
+        ],
+        "operationId": "WaterInvoices_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWaterInvoiceCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -137,11 +322,435 @@
       },
       "ElectricityInvoiceDto": {
         "type": "object",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usagekVA": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fixedCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "usagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ratekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalUsagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateAdditionalUsagekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "demandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalDemandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "combustiblePurchased": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateCombustible": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "provisionalTarif": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateProvisionalTarif": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "energyPurchased": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "rateEnergy": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "otherCharges": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
+      },
+      "ReadingType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Read",
+          "Estimated",
+          "Adjusted"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
       },
       "CreateElectricityInvoiceCommand": {
         "type": "object",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "properties": {
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usagekVA": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fixedCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "usagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ratekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalUsagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateAdditionalUsagekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "demandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalDemandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "combustiblePurchased": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateCombustible": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "provisionalTarif": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateProvisionalTarif": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "energyPurchased": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "rateEnergy": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "otherCharges": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
+      },
+      "StoresVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stores": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/StoreDto"
+            }
+          }
+        }
+      },
+      "StoreDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateStoreCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "WaterInvoicesVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "invoices": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/WaterInvoiceDto"
+            }
+          }
+        }
+      },
+      "WaterInvoiceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "waterCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "stormDrainCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "ccarCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "specialCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fiscalPlanAdjustment": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usage": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
+      },
+      "CreateWaterInvoiceCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "waterCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "stormDrainCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "ccarCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "specialCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fiscalPlanAdjustment": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usage": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
       }
     },
     "securitySchemes": {

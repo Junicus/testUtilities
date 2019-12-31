@@ -121,6 +121,288 @@ export class ElectricityInvoicesClient implements IElectricityInvoicesClient {
     }
 }
 
+export interface IOidcConfigurationClient {
+    getClientRequestParameters(clientId: string | null): Promise<FileResponse>;
+}
+
+export class OidcConfigurationClient implements IOidcConfigurationClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getClientRequestParameters(clientId: string | null): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/_configuration/{clientId}";
+        if (clientId === undefined || clientId === null)
+            throw new Error("The parameter 'clientId' must be defined.");
+        url_ = url_.replace("{clientId}", encodeURIComponent("" + clientId)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            responseType: "blob",
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetClientRequestParameters(_response);
+        });
+    }
+
+    protected processGetClientRequestParameters(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: response.data as Blob, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+}
+
+export interface IStoresClient {
+    get(): Promise<StoresVM>;
+    create(command: CreateStoreCommand): Promise<string>;
+}
+
+export class StoresClient implements IStoresClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Promise<StoresVM> {
+        let url_ = this.baseUrl + "/api/Stores";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: AxiosResponse): Promise<StoresVM> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = StoresVM.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<StoresVM>(<any>null);
+    }
+
+    create(command: CreateStoreCommand): Promise<string> {
+        let url_ = this.baseUrl + "/api/Stores";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(<any>null);
+    }
+}
+
+export interface IWaterInvoicesClient {
+    get(): Promise<WaterInvoicesVM>;
+    create(command: CreateWaterInvoiceCommand): Promise<string>;
+}
+
+export class WaterInvoicesClient implements IWaterInvoicesClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    get(): Promise<WaterInvoicesVM> {
+        let url_ = this.baseUrl + "/api/WaterInvoices";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: AxiosResponse): Promise<WaterInvoicesVM> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = WaterInvoicesVM.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<WaterInvoicesVM>(<any>null);
+    }
+
+    create(command: CreateWaterInvoiceCommand): Promise<string> {
+        let url_ = this.baseUrl + "/api/WaterInvoices";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(<any>null);
+    }
+}
+
 export class ProblemDetails implements IProblemDetails {
     type?: string | undefined;
     title?: string | undefined;
@@ -234,6 +516,36 @@ export interface IElectricityInvoicesVM {
 }
 
 export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
 
     constructor(data?: IElectricityInvoiceDto) {
         if (data) {
@@ -245,6 +557,38 @@ export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
     }
 
     init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usagekVA = _data["usagekVA"];
+            this.fixedCharge = _data["fixedCharge"];
+            this.usagekWh = _data["usagekWh"];
+            this.ratekWh = _data["ratekWh"];
+            this.additionalUsagekWh = _data["additionalUsagekWh"];
+            this.rateAdditionalUsagekWh = _data["rateAdditionalUsagekWh"];
+            this.demandCharge = _data["demandCharge"];
+            this.additionalDemandCharge = _data["additionalDemandCharge"];
+            this.combustiblePurchased = _data["combustiblePurchased"];
+            this.rateCombustible = _data["rateCombustible"];
+            this.provisionalTarif = _data["provisionalTarif"];
+            this.rateProvisionalTarif = _data["rateProvisionalTarif"];
+            this.energyPurchased = _data["energyPurchased"];
+            this.rateEnergy = _data["rateEnergy"];
+            this.celiUse = _data["celiUse"];
+            this.celiRate = _data["celiRate"];
+            this.subsidioHHUse = _data["subsidioHHUse"];
+            this.subsidioHHRate = _data["subsidioHHRate"];
+            this.subsidioNHHUse = _data["subsidioNHHUse"];
+            this.subsidioNHHRate = _data["subsidioNHHRate"];
+            this.otherCharges = _data["otherCharges"];
+            this.readingType = _data["readingType"];
+        }
     }
 
     static fromJS(data: any): ElectricityInvoiceDto {
@@ -256,14 +600,109 @@ export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usagekVA"] = this.usagekVA;
+        data["fixedCharge"] = this.fixedCharge;
+        data["usagekWh"] = this.usagekWh;
+        data["ratekWh"] = this.ratekWh;
+        data["additionalUsagekWh"] = this.additionalUsagekWh;
+        data["rateAdditionalUsagekWh"] = this.rateAdditionalUsagekWh;
+        data["demandCharge"] = this.demandCharge;
+        data["additionalDemandCharge"] = this.additionalDemandCharge;
+        data["combustiblePurchased"] = this.combustiblePurchased;
+        data["rateCombustible"] = this.rateCombustible;
+        data["provisionalTarif"] = this.provisionalTarif;
+        data["rateProvisionalTarif"] = this.rateProvisionalTarif;
+        data["energyPurchased"] = this.energyPurchased;
+        data["rateEnergy"] = this.rateEnergy;
+        data["celiUse"] = this.celiUse;
+        data["celiRate"] = this.celiRate;
+        data["subsidioHHUse"] = this.subsidioHHUse;
+        data["subsidioHHRate"] = this.subsidioHHRate;
+        data["subsidioNHHUse"] = this.subsidioNHHUse;
+        data["subsidioNHHRate"] = this.subsidioNHHRate;
+        data["otherCharges"] = this.otherCharges;
+        data["readingType"] = this.readingType;
         return data; 
     }
 }
 
 export interface IElectricityInvoiceDto {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
+}
+
+export enum ReadingType {
+    Read = 0,
+    Estimated = 1,
+    Adjusted = 2,
 }
 
 export class CreateElectricityInvoiceCommand implements ICreateElectricityInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
 
     constructor(data?: ICreateElectricityInvoiceCommand) {
         if (data) {
@@ -275,6 +714,37 @@ export class CreateElectricityInvoiceCommand implements ICreateElectricityInvoic
     }
 
     init(_data?: any) {
+        if (_data) {
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usagekVA = _data["usagekVA"];
+            this.fixedCharge = _data["fixedCharge"];
+            this.usagekWh = _data["usagekWh"];
+            this.ratekWh = _data["ratekWh"];
+            this.additionalUsagekWh = _data["additionalUsagekWh"];
+            this.rateAdditionalUsagekWh = _data["rateAdditionalUsagekWh"];
+            this.demandCharge = _data["demandCharge"];
+            this.additionalDemandCharge = _data["additionalDemandCharge"];
+            this.combustiblePurchased = _data["combustiblePurchased"];
+            this.rateCombustible = _data["rateCombustible"];
+            this.provisionalTarif = _data["provisionalTarif"];
+            this.rateProvisionalTarif = _data["rateProvisionalTarif"];
+            this.energyPurchased = _data["energyPurchased"];
+            this.rateEnergy = _data["rateEnergy"];
+            this.celiUse = _data["celiUse"];
+            this.celiRate = _data["celiRate"];
+            this.subsidioHHUse = _data["subsidioHHUse"];
+            this.subsidioHHRate = _data["subsidioHHRate"];
+            this.subsidioNHHUse = _data["subsidioNHHUse"];
+            this.subsidioNHHRate = _data["subsidioNHHRate"];
+            this.otherCharges = _data["otherCharges"];
+            this.readingType = _data["readingType"];
+        }
     }
 
     static fromJS(data: any): CreateElectricityInvoiceCommand {
@@ -286,11 +756,416 @@ export class CreateElectricityInvoiceCommand implements ICreateElectricityInvoic
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usagekVA"] = this.usagekVA;
+        data["fixedCharge"] = this.fixedCharge;
+        data["usagekWh"] = this.usagekWh;
+        data["ratekWh"] = this.ratekWh;
+        data["additionalUsagekWh"] = this.additionalUsagekWh;
+        data["rateAdditionalUsagekWh"] = this.rateAdditionalUsagekWh;
+        data["demandCharge"] = this.demandCharge;
+        data["additionalDemandCharge"] = this.additionalDemandCharge;
+        data["combustiblePurchased"] = this.combustiblePurchased;
+        data["rateCombustible"] = this.rateCombustible;
+        data["provisionalTarif"] = this.provisionalTarif;
+        data["rateProvisionalTarif"] = this.rateProvisionalTarif;
+        data["energyPurchased"] = this.energyPurchased;
+        data["rateEnergy"] = this.rateEnergy;
+        data["celiUse"] = this.celiUse;
+        data["celiRate"] = this.celiRate;
+        data["subsidioHHUse"] = this.subsidioHHUse;
+        data["subsidioHHRate"] = this.subsidioHHRate;
+        data["subsidioNHHUse"] = this.subsidioNHHUse;
+        data["subsidioNHHRate"] = this.subsidioNHHRate;
+        data["otherCharges"] = this.otherCharges;
+        data["readingType"] = this.readingType;
         return data; 
     }
 }
 
 export interface ICreateElectricityInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
+}
+
+export class StoresVM implements IStoresVM {
+    stores?: StoreDto[] | undefined;
+
+    constructor(data?: IStoresVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["stores"])) {
+                this.stores = [] as any;
+                for (let item of _data["stores"])
+                    this.stores!.push(StoreDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): StoresVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StoresVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.stores)) {
+            data["stores"] = [];
+            for (let item of this.stores)
+                data["stores"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IStoresVM {
+    stores?: StoreDto[] | undefined;
+}
+
+export class StoreDto implements IStoreDto {
+    name?: string | undefined;
+
+    constructor(data?: IStoreDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): StoreDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StoreDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IStoreDto {
+    name?: string | undefined;
+}
+
+export class CreateStoreCommand implements ICreateStoreCommand {
+    name?: string | undefined;
+
+    constructor(data?: ICreateStoreCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): CreateStoreCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStoreCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface ICreateStoreCommand {
+    name?: string | undefined;
+}
+
+export class WaterInvoicesVM implements IWaterInvoicesVM {
+    invoices?: WaterInvoiceDto[] | undefined;
+
+    constructor(data?: IWaterInvoicesVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["invoices"])) {
+                this.invoices = [] as any;
+                for (let item of _data["invoices"])
+                    this.invoices!.push(WaterInvoiceDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WaterInvoicesVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new WaterInvoicesVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.invoices)) {
+            data["invoices"] = [];
+            for (let item of this.invoices)
+                data["invoices"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IWaterInvoicesVM {
+    invoices?: WaterInvoiceDto[] | undefined;
+}
+
+export class WaterInvoiceDto implements IWaterInvoiceDto {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+
+    constructor(data?: IWaterInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.waterCharge = _data["waterCharge"];
+            this.stormDrainCharge = _data["stormDrainCharge"];
+            this.ccarCharge = _data["ccarCharge"];
+            this.specialCharge = _data["specialCharge"];
+            this.fiscalPlanAdjustment = _data["fiscalPlanAdjustment"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usage = _data["usage"];
+            this.readingType = _data["readingType"];
+        }
+    }
+
+    static fromJS(data: any): WaterInvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WaterInvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["waterCharge"] = this.waterCharge;
+        data["stormDrainCharge"] = this.stormDrainCharge;
+        data["ccarCharge"] = this.ccarCharge;
+        data["specialCharge"] = this.specialCharge;
+        data["fiscalPlanAdjustment"] = this.fiscalPlanAdjustment;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usage"] = this.usage;
+        data["readingType"] = this.readingType;
+        return data; 
+    }
+}
+
+export interface IWaterInvoiceDto {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+}
+
+export class CreateWaterInvoiceCommand implements ICreateWaterInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+
+    constructor(data?: ICreateWaterInvoiceCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.waterCharge = _data["waterCharge"];
+            this.stormDrainCharge = _data["stormDrainCharge"];
+            this.ccarCharge = _data["ccarCharge"];
+            this.specialCharge = _data["specialCharge"];
+            this.fiscalPlanAdjustment = _data["fiscalPlanAdjustment"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usage = _data["usage"];
+            this.readingType = _data["readingType"];
+        }
+    }
+
+    static fromJS(data: any): CreateWaterInvoiceCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateWaterInvoiceCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["waterCharge"] = this.waterCharge;
+        data["stormDrainCharge"] = this.stormDrainCharge;
+        data["ccarCharge"] = this.ccarCharge;
+        data["specialCharge"] = this.specialCharge;
+        data["fiscalPlanAdjustment"] = this.fiscalPlanAdjustment;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usage"] = this.usage;
+        data["readingType"] = this.readingType;
+        return data; 
+    }
+}
+
+export interface ICreateWaterInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {
