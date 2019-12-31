@@ -11,7 +11,6 @@ export const CallbackPage: React.FC<CallbackPageProps> = ({ history }) => {
     <CallbackComponent
       userManager={userManager}
       successCallback={user => {
-        console.log("CallbackSuccess:", user);
         history.push(user.state ? user.state.returnUrl : "/");
       }}
       errorCallback={error => {

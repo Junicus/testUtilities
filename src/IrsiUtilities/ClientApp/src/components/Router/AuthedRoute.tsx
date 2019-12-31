@@ -21,7 +21,6 @@ export const AuthedRoute: React.FC<AuthedRouteProps> = ({
     state => state.oidc.user
   );
 
-  console.log("AuthedRoute:", otherProps);
   const { path } = otherProps;
 
   return (
