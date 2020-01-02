@@ -4,9 +4,9 @@ import { CallbackComponent } from "redux-oidc";
 
 import userManager from "../../store/auth/userManager";
 
-interface CallbackPageProps extends RouteComponentProps {}
+interface LoginCallbackPageProps extends RouteComponentProps {}
 
-export const CallbackPage: React.FC<CallbackPageProps> = ({ history }) => {
+export const LoginCallbackPage: React.FC<LoginCallbackPageProps> = ({ history }) => {
   return (
     <CallbackComponent
       userManager={userManager}
