@@ -2,6 +2,8 @@ import { Middleware, MiddlewareAPI, Dispatch } from "redux";
 import { KnownActions, AppState } from "../types";
 import { WaterInvoicesActions, WaterInvoicesActionTypes } from "./types";
 import { WaterInvoicesClient } from "../../utils/api/IrsiUtilities";
+import userManager from "../auth/userManager";
+import axios from "axios";
 
 export const createWaterInvoicesMiddleware = (): Middleware => {
   return ({ dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (
@@ -20,6 +22,10 @@ export const createWaterInvoicesMiddleware = (): Middleware => {
 const getWaterInvoices = () => async (
   dispatch: Dispatch<WaterInvoicesActions>
 ) => {
+  var user = await userManager.getUser();
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${user?.access_token}`;
   const client = new WaterInvoicesClient();
   client
     .get()

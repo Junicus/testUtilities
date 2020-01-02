@@ -5,14 +5,21 @@ import {
   ElectricityInvoicesActionTypes
 } from "./types";
 import { ElectricityInvoicesClient } from "../../utils/api/IrsiUtilities";
+import userManager from "../auth/userManager";
+import axios from "axios";
+import Axios from "axios";
 
 export const createElectricityInvoicesMiddleware = (): Middleware => {
-  return ({ dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (
-    next: Dispatch
-  ) => (action: KnownActions) => {
+  return ({
+    getState,
+    dispatch
+  }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (next: Dispatch) => (
+    action: KnownActions
+  ) => {
     switch (action.type) {
       case ElectricityInvoicesActionTypes.GET_ELECTRICITY_INVOICES: {
-        getElectricityInvoices()(dispatch);
+        const token = getState().oidc.user?.access_token;
+        getElectricityInvoices(token)(dispatch);
         break;
       }
     }
@@ -20,10 +27,13 @@ export const createElectricityInvoicesMiddleware = (): Middleware => {
   };
 };
 
-const getElectricityInvoices = () => async (
+const getElectricityInvoices = (token?: string) => async (
   dispatch: Dispatch<ElectricityInvoicesActions>
 ) => {
-  const client = new ElectricityInvoicesClient();
+  const axiosInstance = axios.create({
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const client = new ElectricityInvoicesClient(undefined, axiosInstance);
   client
     .get()
     .then(model => {
