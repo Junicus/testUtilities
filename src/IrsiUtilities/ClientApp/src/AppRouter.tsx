@@ -4,12 +4,14 @@ import { Router, Route } from "react-router-dom";
 
 import { AuthedRoute } from "./components/Router/AuthedRoute";
 import Layout from "./components/Layout";
-import { Home } from "./components/Home";
 import { LoginPage } from "./pages/Auth/LoginPage";
 import { LogoutPage } from "./pages/Auth/LogoutPage";
 import { LoginCallbackPage } from "./pages/Auth/LoginCallbackPage";
 import { LogoutCallbackPage } from "./pages/Auth/LogoutCallbackPage";
 import { StoresPage } from "./pages/Stores/StoresPage";
+import { WaterInvoicesPage } from "./pages/WaterInvoices/WaterInvoicesPage";
+import { ElectricityInvoicesPage } from "./pages/ElectricityInvoices/ElectricityInvoicesPage";
+import { HomePage } from "./pages/Home/HomePage";
 
 export const AppRouter: React.FC = () => {
   const baseUrl = document
@@ -21,10 +23,16 @@ export const AppRouter: React.FC = () => {
   return (
     <Router history={history}>
       <Layout>
-        <Route exact path="/" component={Home} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/logout" component={LogoutPage} />
+        <Route exact path="/" component={HomePage} />
         <AuthedRoute exact path="/stores" component={StoresPage} />
+        <AuthedRoute exact path="/water" component={WaterInvoicesPage} />
+        <AuthedRoute
+          exact
+          path="/electricity"
+          component={ElectricityInvoicesPage}
+        />
         <Route
           exact
           path="/authentication/login-callback"
