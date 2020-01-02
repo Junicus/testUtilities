@@ -17,8 +17,8 @@ namespace IrsiUtilities.Infrastructure.Identity
 
         public async Task<string> GetUserNameAsync(string userId)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
-            return user.UserName;
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user?.UserName;
         }
 
         public async Task<(Result result, string UserId)> CreateUserAsync(string userName, string password)

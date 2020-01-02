@@ -1,11 +1,13 @@
 ﻿using System;
 using IrsiUtilities.Application.Common.Helpers;
+using IrsiUtilities.Application.Common.Mappings;
+using IrsiUtilities.Domain.Entities;
 using IrsiUtilities.Domain.Enums;
 using Newtonsoft.Json;
 
 namespace IrsiUtilities.Application.WaterInvoices.Queries
 {
-    public class WaterInvoiceDto
+    public class WaterInvoiceDto : IMapFrom<WaterInvoice>
     {
         public Guid Id { get; set; }
         [JsonConverter(typeof(JsonDateConverter))]
