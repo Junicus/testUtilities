@@ -2,12 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { AppState } from "../../store/types";
 import { User } from "oidc-client";
-import {
-  RouteComponentProps,
-  RouteProps,
-  Redirect,
-  Route
-} from "react-router-dom";
+import { RouteProps, Redirect, Route } from "react-router-dom";
 
 interface AuthedRouteProps extends RouteProps {
   component: any;

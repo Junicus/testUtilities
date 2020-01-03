@@ -1,14 +1,14 @@
 import * as React from "react";
-import {
-  Collapse,
-  Container,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavItem,
-  NavLink,
-  Nav
-} from "reactstrap";
+// import {
+//   Collapse,
+//   Container,
+//   Navbar,
+//   NavbarBrand,
+//   NavbarToggler,
+//   NavItem,
+//   NavLink,
+//   Nav
+// } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
@@ -24,7 +24,7 @@ export default class Sidebar extends React.PureComponent<
     return (
       <div style={{ width: 240 }}>
         <nav>
-          <Nav vertical>
+          {/* <Nav vertical>
             <NavItem>
               <NavLink tag={Link} className="text-dark" to="/">
                 Home
@@ -45,7 +45,7 @@ export default class Sidebar extends React.PureComponent<
                 Electricity
               </NavLink>
             </NavItem>
-          </Nav>
+          </Nav> */}
         </nav>
       </div>
     );

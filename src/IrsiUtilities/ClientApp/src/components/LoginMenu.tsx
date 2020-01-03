@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { AppState } from "../store/types";
-import { NavItem, NavLink } from "reactstrap";
+// import { NavItem, NavLink } from "reactstrap";
 import { Link } from "react-router-dom";
 
 interface AuthenticatedViewProps {
@@ -13,7 +13,7 @@ interface AnonymousViewProps {}
 const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({ userName }) => {
   return (
     <>
-      <NavItem>
+      {/* <NavItem>
         <NavLink tag={Link} className="text-dark" to="/">
           Hello {userName}
         </NavLink>
@@ -22,7 +22,7 @@ const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({ userName }) => {
         <NavLink tag={Link} className="text-dark" to="/logout">
           Logout
         </NavLink>
-      </NavItem>
+      </NavItem> */}
     </>
   );
 };
@@ -30,11 +30,11 @@ const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({ userName }) => {
 const AnonymousView: React.FC<AnonymousViewProps> = () => {
   return (
     <>
-      <NavItem>
+      {/* <NavItem>
         <NavLink tag={Link} className="text-dark" to="/login">
           Login
         </NavLink>
-      </NavItem>
+      </NavItem> */}
     </>
   );
 };
