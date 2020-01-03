@@ -5,9 +5,7 @@ import {
   ElectricityInvoicesActionTypes
 } from "./types";
 import { ElectricityInvoicesClient } from "../../utils/api/IrsiUtilities";
-import userManager from "../auth/userManager";
 import axios from "axios";
-import Axios from "axios";
 
 export const createElectricityInvoicesMiddleware = (): Middleware => {
   return ({
