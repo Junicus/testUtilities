@@ -1,4 +1,4 @@
-import { StoreDto } from "../../utils/api/IrsiUtilities";
+import { StoreDto } from '../../utils/api/IrsiUtilities';
 
 export interface StoresState {
   byId: StoresDictionary;
@@ -10,9 +10,9 @@ export interface StoresDictionary {
 }
 
 export enum StoreActionTypes {
-  GET_STORES = "@@stores/GET_STORES",
-  GET_STORES_SUCCESS = "@@stores/GET_STORES_SUCCESS",
-  GET_STORES_FAILED = "@@stores/GET_STORES_FAILED"
+  GET_STORES = '@@stores/GET_STORES',
+  GET_STORES_SUCCESS = '@@stores/GET_STORES_SUCCESS',
+  GET_STORES_FAILED = '@@stores/GET_STORES_FAILED',
 }
 
 export interface GetStoresAction {
@@ -33,7 +33,4 @@ export interface GetStoresFailedAction {
   };
 }
 
-export type StoreActions =
-  | GetStoresAction
-  | GetStoresSuccessAction
-  | GetStoresFailedAction;
+export type StoreActions = GetStoresAction | GetStoresSuccessAction | GetStoresFailedAction;

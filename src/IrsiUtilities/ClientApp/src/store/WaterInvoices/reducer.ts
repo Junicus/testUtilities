@@ -1,15 +1,12 @@
-import { Reducer } from "redux";
-import { WaterInvoicesState, WaterInvoicesActions } from "./types";
+import { Reducer } from 'redux';
+import { WaterInvoicesState, WaterInvoicesActions } from './types';
 
 const initialState: WaterInvoicesState = {
   byId: {},
-  allIds: []
+  allIds: [],
 };
 
-export const reducer: Reducer<WaterInvoicesState, WaterInvoicesActions> = (
-  state = initialState,
-  action
-) => {
+export const reducer: Reducer<WaterInvoicesState, WaterInvoicesActions> = (state = initialState, action) => {
   switch (action.type) {
     default:
       return state;

@@ -1,4 +1,4 @@
-import { WaterInvoiceDto } from "../../utils/api/IrsiUtilities";
+import { WaterInvoiceDto } from '../../utils/api/IrsiUtilities';
 
 export interface WaterInvoicesState {
   byId: WaterInvoicesDictionary;
@@ -10,9 +10,9 @@ export interface WaterInvoicesDictionary {
 }
 
 export enum WaterInvoicesActionTypes {
-  GET_WATER_INVOICES = "@@water/GET_WATER_INVOICES",
-  GET_WATER_INVOICES_SUCCESS = "@@water/GET_WATER_INVOICES_SUCCESS",
-  GET_WATER_INVOICES_FAILED = "@@water/GET_WATER_INVOICES_FAILED"
+  GET_WATER_INVOICES = '@@water/GET_WATER_INVOICES',
+  GET_WATER_INVOICES_SUCCESS = '@@water/GET_WATER_INVOICES_SUCCESS',
+  GET_WATER_INVOICES_FAILED = '@@water/GET_WATER_INVOICES_FAILED',
 }
 
 export interface GetWaterInvoicesAction {
@@ -33,7 +33,4 @@ export interface GetWaterInvoicesFailedAction {
   };
 }
 
-export type WaterInvoicesActions =
-  | GetWaterInvoicesAction
-  | GetWaterInvoicesSuccessAction
-  | GetWaterInvoicesFailedAction;
+export type WaterInvoicesActions = GetWaterInvoicesAction | GetWaterInvoicesSuccessAction | GetWaterInvoicesFailedAction;

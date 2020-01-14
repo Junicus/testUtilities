@@ -1,20 +1,15 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { AppState } from "../../store/types";
-import { User } from "oidc-client";
-import { RouteProps, Redirect, Route } from "react-router-dom";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../store/types';
+import { User } from 'oidc-client';
+import { RouteProps, Redirect, Route } from 'react-router-dom';
 
 interface AuthedRouteProps extends RouteProps {
   component: any;
 }
 
-export const AuthedRoute: React.FC<AuthedRouteProps> = ({
-  component: Component,
-  ...otherProps
-}) => {
-  const user = useSelector<AppState, User | undefined>(
-    state => state.oidc.user
-  );
+export const AuthedRoute: React.FC<AuthedRouteProps> = ({ component: Component, ...otherProps }) => {
+  const user = useSelector<AppState, User | undefined>(state => state.oidc.user);
 
   const { path } = otherProps;
 
@@ -22,11 +17,7 @@ export const AuthedRoute: React.FC<AuthedRouteProps> = ({
     <Route
       {...otherProps}
       render={props => {
-        return !user || user.expired ? (
-          <Redirect to={{ pathname: "/login", state: { returnUrl: path } }} />
-        ) : (
-          <Component {...props} />
-        );
+        return !user || user.expired ? <Redirect to={{ pathname: '/login', state: { returnUrl: path } }} /> : <Component {...props} />;
       }}
     />
   );

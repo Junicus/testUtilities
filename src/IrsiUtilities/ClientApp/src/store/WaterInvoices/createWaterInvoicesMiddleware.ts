@@ -1,14 +1,12 @@
-import { Middleware, MiddlewareAPI, Dispatch } from "redux";
-import { KnownActions, AppState } from "../types";
-import { WaterInvoicesActions, WaterInvoicesActionTypes } from "./types";
-import { WaterInvoicesClient } from "../../utils/api/IrsiUtilities";
-import userManager from "../auth/userManager";
-import axios from "axios";
+import { Middleware, MiddlewareAPI, Dispatch } from 'redux';
+import { KnownActions, AppState } from '../types';
+import { WaterInvoicesActions, WaterInvoicesActionTypes } from './types';
+import { WaterInvoicesClient } from '../../utils/api/IrsiUtilities';
+import userManager from '../auth/userManager';
+import axios from 'axios';
 
 export const createWaterInvoicesMiddleware = (): Middleware => {
-  return ({ dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (
-    next: Dispatch
-  ) => (action: KnownActions) => {
+  return ({ dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (next: Dispatch) => (action: KnownActions) => {
     switch (action.type) {
       case WaterInvoicesActionTypes.GET_WATER_INVOICES: {
         getWaterInvoices()(dispatch);
@@ -19,13 +17,9 @@ export const createWaterInvoicesMiddleware = (): Middleware => {
   };
 };
 
-const getWaterInvoices = () => async (
-  dispatch: Dispatch<WaterInvoicesActions>
-) => {
+const getWaterInvoices = () => async (dispatch: Dispatch<WaterInvoicesActions>) => {
   var user = await userManager.getUser();
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${user?.access_token}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${user?.access_token}`;
   const client = new WaterInvoicesClient();
   client
     .get()
@@ -33,16 +27,16 @@ const getWaterInvoices = () => async (
       dispatch({
         type: WaterInvoicesActionTypes.GET_WATER_INVOICES_SUCCESS,
         payload: {
-          invoices: model.invoices
-        }
+          invoices: model.invoices,
+        },
       });
     })
     .catch(reason => {
       dispatch({
         type: WaterInvoicesActionTypes.GET_WATER_INVOICES_FAILED,
         payload: {
-          error: reason
-        }
+          error: reason,
+        },
       });
     });
 };

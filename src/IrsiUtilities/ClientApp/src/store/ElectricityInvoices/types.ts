@@ -1,4 +1,4 @@
-import { ElectricityInvoiceDto } from "../../utils/api/IrsiUtilities";
+import { ElectricityInvoiceDto } from '../../utils/api/IrsiUtilities';
 
 export interface ElectricityInvoicesState {
   byId: ElectricityInvoicesDictionary;
@@ -10,9 +10,9 @@ export interface ElectricityInvoicesDictionary {
 }
 
 export enum ElectricityInvoicesActionTypes {
-  GET_ELECTRICITY_INVOICES = "@@electricity/GET_ELECTRICITY_INVOICES",
-  GET_ELECTRICITY_INVOICES_SUCCESS = "@@electricity/GET_ELECTRICITY_INVOICES_SUCCESS",
-  GET_ELECTRICITY_INVOICES_FAILED = "@@electricity/GET_ELECTRICITY_INVOICES_FAILED"
+  GET_ELECTRICITY_INVOICES = '@@electricity/GET_ELECTRICITY_INVOICES',
+  GET_ELECTRICITY_INVOICES_SUCCESS = '@@electricity/GET_ELECTRICITY_INVOICES_SUCCESS',
+  GET_ELECTRICITY_INVOICES_FAILED = '@@electricity/GET_ELECTRICITY_INVOICES_FAILED',
 }
 
 export interface GetElectricityInvoicesAction {

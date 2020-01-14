@@ -1,9 +1,9 @@
-import React from "react";
-import { Dispatch } from "redux";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 
-import { WaterInvoicesActionTypes } from "../../store/WaterInvoices/types";
-import { KnownActions } from "../../store/types";
+import { WaterInvoicesActionTypes } from '../../store/WaterInvoices/types';
+import { KnownActions } from '../../store/types';
 
 export const WaterInvoicesPage = () => {
   const dispatch = useDispatch<Dispatch<KnownActions>>();

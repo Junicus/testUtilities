@@ -1,12 +1,12 @@
-import * as React from "react";
-import { Provider } from "react-redux";
-import { OidcProvider } from "redux-oidc";
-import { AppRouter } from "./AppRouter";
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import { OidcProvider } from 'redux-oidc';
+import { AppRouter } from './AppRouter';
 
-import "./custom.css";
+import './custom.css';
 
-import configureStore from "./store/configureStore";
-import userManager from "./store/auth/userManager";
+import configureStore from './store/configureStore';
+import userManager from './store/auth/userManager';
 
 const store = configureStore();
 

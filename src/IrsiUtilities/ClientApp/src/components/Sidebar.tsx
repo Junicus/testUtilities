@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 // import {
 //   Collapse,
 //   Container,
@@ -9,15 +9,12 @@ import * as React from "react";
 //   NavLink,
 //   Nav
 // } from "reactstrap";
-import { Link } from "react-router-dom";
-import "./Header.css";
+import { Link } from 'react-router-dom';
+import './Header.css';
 
-export default class Sidebar extends React.PureComponent<
-  {},
-  { isOpen: boolean }
-> {
+export default class Sidebar extends React.PureComponent<{}, { isOpen: boolean }> {
   public state = {
-    isOpen: false
+    isOpen: false,
   };
 
   public render() {
@@ -53,7 +50,7 @@ export default class Sidebar extends React.PureComponent<
 
   private toggle = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   };
 }

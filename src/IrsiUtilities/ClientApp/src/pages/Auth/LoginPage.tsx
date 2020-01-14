@@ -1,6 +1,6 @@
-import React from "react";
-import userManager from "../../store/auth/userManager";
-import { RouteComponentProps } from "react-router-dom";
+import React from 'react';
+import userManager from '../../store/auth/userManager';
+import { RouteComponentProps } from 'react-router-dom';
 
 interface LoginPageProps extends RouteComponentProps {}
 
