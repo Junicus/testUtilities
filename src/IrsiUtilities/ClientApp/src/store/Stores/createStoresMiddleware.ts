@@ -2,7 +2,7 @@ import { Middleware, MiddlewareAPI, Dispatch } from 'redux';
 import { KnownActions, AppState } from '../types';
 import { StoreActionTypes, StoreActions } from './types';
 import { StoresClient } from '../../utils/api/IrsiUtilities';
-import userManager from '../auth/userManager';
+import userManager from '../Auth/userManager';
 import axios from 'axios';
 
 export const createStoresMiddleware = (): Middleware => {

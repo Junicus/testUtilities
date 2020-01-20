@@ -1,5 +1,5 @@
-import React, { MouseEvent } from 'react';
-import userManager from '../../store/auth/userManager';
+import React from 'react';
+import userManager from '../../store/Auth/userManager';
 
 export const LogoutPage: React.FC = () => {
   React.useEffect(() => {

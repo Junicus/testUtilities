@@ -1,8 +1,8 @@
 import React from 'react';
-import { useHistory, RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import { CallbackComponent } from 'redux-oidc';
 
-import userManager from '../../store/auth/userManager';
+import userManager from '../../store/Auth/userManager';
 
 interface LoginCallbackPageProps extends RouteComponentProps {}
 

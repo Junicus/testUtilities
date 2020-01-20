@@ -1,13 +1,13 @@
 import { Middleware, MiddlewareAPI, Dispatch } from 'redux';
 import { KnownActions, AppState } from '../types';
-import { ElectricityInvoicesActions, ElectricityInvoicesActionTypes } from './types';
+import { ElectricityInvoiceActions, ElectricityInvoiceActionTypes } from './types';
 import { ElectricityInvoicesClient } from '../../utils/api/IrsiUtilities';
 import axios from 'axios';
 
 export const createElectricityInvoicesMiddleware = (): Middleware => {
   return ({ getState, dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (next: Dispatch) => (action: KnownActions) => {
     switch (action.type) {
-      case ElectricityInvoicesActionTypes.GET_ELECTRICITY_INVOICES: {
+      case ElectricityInvoiceActionTypes.GET_ELECTRICITY_INVOICES: {
         const token = getState().oidc.user?.access_token;
         getElectricityInvoices(token)(dispatch);
         break;
@@ -17,7 +17,7 @@ export const createElectricityInvoicesMiddleware = (): Middleware => {
   };
 };
 
-const getElectricityInvoices = (token?: string) => async (dispatch: Dispatch<ElectricityInvoicesActions>) => {
+const getElectricityInvoices = (token?: string) => async (dispatch: Dispatch<ElectricityInvoiceActions>) => {
   const axiosInstance = axios.create({
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -26,7 +26,7 @@ const getElectricityInvoices = (token?: string) => async (dispatch: Dispatch<Ele
     .get()
     .then(model => {
       dispatch({
-        type: ElectricityInvoicesActionTypes.GET_ELECTRICITY_INVOICES_SUCCESS,
+        type: ElectricityInvoiceActionTypes.GET_ELECTRICITY_INVOICES_SUCCESS,
         payload: {
           invoices: model.invoices,
         },
@@ -34,7 +34,7 @@ const getElectricityInvoices = (token?: string) => async (dispatch: Dispatch<Ele
     })
     .catch(reason => {
       dispatch({
-        type: ElectricityInvoicesActionTypes.GET_ELECTRICITY_INVOICES_FAILED,
+        type: ElectricityInvoiceActionTypes.GET_ELECTRICITY_INVOICES_FAILED,
         payload: {
           error: reason,
         },

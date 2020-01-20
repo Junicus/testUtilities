@@ -1,8 +1,8 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import { SignoutCallbackComponent } from 'redux-oidc';
 
-import userManager from '../../store/auth/userManager';
+import userManager from '../../store/Auth/userManager';
 
 interface LogoutCallbackPageProps extends RouteComponentProps {}
 
@@ -10,7 +10,7 @@ export const LogoutCallbackPage: React.FC<LogoutCallbackPageProps> = ({ history 
   return (
     <SignoutCallbackComponent
       userManager={userManager}
-      successCallback={() => {
+      successCallback={user => {
         history.push('/');
       }}
       errorCallback={error => {

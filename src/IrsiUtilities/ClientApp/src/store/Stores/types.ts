@@ -1,4 +1,4 @@
-import { StoreDto } from '../../utils/api/IrsiUtilities';
+import { StoreDto } from "../../utils/api/IrsiUtilities";
 
 export interface StoresState {
   byId: StoresDictionary;

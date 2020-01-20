@@ -1,19 +1,23 @@
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { OidcProvider } from 'redux-oidc';
+import { ThemeProvider } from 'styled-components';
 import { AppRouter } from './AppRouter';
 
-import './custom.css';
-
-import configureStore from './store/configureStore';
-import userManager from './store/auth/userManager';
+import { configureStore } from './store/configureStore';
+import userManager from './store/Auth/userManager';
+import { irsiTheme } from './themes';
 
 const store = configureStore();
 
-export const App = () => (
+console.log(irsiTheme);
+
+export const App: React.FC = () => (
   <Provider store={store}>
     <OidcProvider store={store} userManager={userManager}>
-      <AppRouter />
+      <ThemeProvider theme={irsiTheme}>
+        <AppRouter />
+      </ThemeProvider>
     </OidcProvider>
   </Provider>
 );

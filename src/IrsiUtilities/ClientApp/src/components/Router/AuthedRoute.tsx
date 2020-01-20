@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { AppState } from '../../store/types';
 import { User } from 'oidc-client';
 import { RouteProps, Redirect, Route } from 'react-router-dom';
+import { AppState } from '../../store/types';
 
 interface AuthedRouteProps extends RouteProps {
   component: any;
