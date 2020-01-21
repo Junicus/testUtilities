@@ -7,14 +7,18 @@ declare module 'styled-components' {
     breakpoints: string[];
     colors: {
       primary: CSS.ColorProperty;
-      link: CSS.ColorProperty;
-      success: CSS.ColorProperty;
-      warning: CSS.ColorProperty;
+      secondary: CSS.ColorProperty;
+      background: CSS.ColorProperty;
+      surface: CSS.ColorProperty;
       error: CSS.ColorProperty;
-      heading: CSS.ColorProperty;
-      text: CSS.ColorProperty;
-      disabled: CSS.ColorProperty;
-      border: CSS.ColorProperty;
+      onprimary: CSS.ColorProperty;
+      onsecondary: CSS.ColorProperty;
+      onbackground: CSS.ColorProperty;
+      onsurface: CSS.ColorProperty;
+      onerror: CSS.ColorProperty;
+    };
+    header: {
+      height: number;
     };
     space: {
       none: number;

@@ -79,15 +79,15 @@ const getVariantStyles = (theme: IrsiTheme, variant: TextVariants): StyledSystem
     case 'H1':
       return { fontSize: [50, 51, 52, 57], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h1' };
     case 'H2':
-      return { fontSize: [37, 39, 41, 43], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h2', color: theme.colors.primary };
+      return { fontSize: [37, 39, 41, 43], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h2' };
     case 'H3':
       return { fontSize: [27, 28, 22, 24], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h3' };
     case 'H4':
-      return { fontSize: [18, 20, 22, 24], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h4', color: theme.colors.primary };
+      return { fontSize: [18, 20, 22, 24], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h4' };
     case 'H5':
       return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h5' };
     case 'H6':
-      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h6', color: theme.colors.primary };
+      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h6' };
     case 'LargeLead':
       return { fontSize: [18, 20, 22, 24], fontWeight: 500, fontFamily: theme.fonts.body, as: 'p' };
     case 'SmallLead':

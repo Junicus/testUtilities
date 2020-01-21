@@ -15,7 +15,9 @@ export const Layout: React.FC = ({ children }) => {
   );
 };
 
-const MainContainer = styled.main({
+const MainContainer = styled.main(({ theme }) => ({
+  backgroundColor: theme.colors.background,
+  color: theme.colors.onbackground,
   display: 'flex',
   flexDirection: 'row',
-});
+}));

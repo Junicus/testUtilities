@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { ThemeConsumer, DefaultTheme } from 'styled-components';
 import { Box } from './Box';
 import { LoginMenu } from './LoginMenu';
 import { Text, AnchorProps } from './Typography/Text';
@@ -19,16 +19,20 @@ export const Header: React.FC = () => {
   );
 };
 
-const HeaderContainer = styled(Box)({
-  background: '#333',
-  display: 'flex',
-  flexDirection: 'row',
-});
+const HeaderContainer = styled(Box)`
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.onprimary};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: ${({ theme }) => theme.header.height}px;
+`;
 
-const NavBrand = styled<React.FC<AnchorProps>>(Text)({
-  textTransform: 'uppercase',
-  textDecoration: 'none',
-});
+const NavBrand = styled<React.FC<AnchorProps>>(Text)`
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.onprimary};
+  padding: ${({ theme }) => theme.space.m}px;
+`;
 
 const HeaderActions = styled(Box)({
   flexGrow: 1,

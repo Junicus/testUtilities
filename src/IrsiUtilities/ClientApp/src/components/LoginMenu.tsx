@@ -36,4 +36,8 @@ export const LoginMenu: React.FC = () => {
   }
 };
 
-const NavAction = styled<React.FC<AnchorProps>>(Text)({});
+const NavAction = styled<React.FC<AnchorProps>>(Text)`
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.onprimary};
+  padding: ${({ theme }) => theme.space.m}px;
+`;
