@@ -4,7 +4,6 @@ import { Button } from '@storybook/react/demo';
 import styled from 'styled-components';
 import { Text } from '../components/Typography/Text';
 import { irsiTheme } from '../themes';
-import { ColorProps, color } from 'styled-system';
 
 export default {
   title: 'Button',

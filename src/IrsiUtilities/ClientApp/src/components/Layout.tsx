@@ -1,15 +1,21 @@
 import React from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import styled from 'styled-components';
 
 export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Header />
-      <main>
+      <MainContainer>
         <Sidebar />
         {children}
-      </main>
+      </MainContainer>
     </>
   );
 };
+
+const MainContainer = styled.main({
+  display: 'flex',
+  flexDirection: 'row',
+});

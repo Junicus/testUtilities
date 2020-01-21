@@ -1,7 +1,6 @@
 import React from 'react';
-import styled, { ThemeContext, DefaultTheme } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import {
-  Theme,
   space,
   color,
   ColorProps,
@@ -28,6 +27,7 @@ import {
   TextAlignProps,
 } from 'styled-system';
 import { LinkProps, Link } from 'react-router-dom';
+import { IrsiTheme } from '../../themes/types';
 
 export type TextVariants = 'H1' | 'H2' | 'H3' | 'H4' | 'H5' | 'H6' | 'LargeLead' | 'SmallLead' | 'Paragraph' | 'SmallParagraph' | 'Link';
 
@@ -46,25 +46,17 @@ export type StyledSystemProps =
   | TextAlignProps
   | { color?: string; as?: keyof JSX.IntrinsicElements | React.ComponentType<any> };
 
-const fontFamilies: { heading: string; body: string } = {
-  heading: 'Montserrat, serif',
-  body: 'Raleway, sans-serif',
-};
-
 export type BaseStyles = {
   base: StyledSystemProps;
 };
 
 export type TextProps = StyledSystemProps & {
   variant?: TextVariants;
-  component?: any;
 };
 
-export type AnchorProps = StyledSystemProps &
+export type AnchorProps = TextProps &
   Pick<LinkProps, 'to'> & {
     onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
-    variant?: TextVariants;
-    component?: any;
   };
 
 const DynamicComponent = styled.div`
@@ -82,46 +74,48 @@ const DynamicComponent = styled.div`
     ${textAlign}
 `;
 
-const getVariantStyles = (theme: DefaultTheme & Theme, variant: TextVariants): StyledSystemProps => {
+const getVariantStyles = (theme: IrsiTheme, variant: TextVariants): StyledSystemProps => {
   switch (variant) {
     case 'H1':
-      return { fontSize: [50, 51, 52, 57], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h1' };
+      return { fontSize: [50, 51, 52, 57], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h1' };
     case 'H2':
-      return { fontSize: [37, 39, 41, 43], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h2', color: theme.colors.primary };
+      return { fontSize: [37, 39, 41, 43], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h2', color: theme.colors.primary };
     case 'H3':
-      return { fontSize: [27, 28, 22, 24], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h3' };
+      return { fontSize: [27, 28, 22, 24], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h3' };
     case 'H4':
-      return { fontSize: [18, 20, 22, 24], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h4', color: theme.colors.primary };
+      return { fontSize: [18, 20, 22, 24], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h4', color: theme.colors.primary };
     case 'H5':
-      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h5' };
+      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h5' };
     case 'H6':
-      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: fontFamilies.heading, as: 'h6', color: theme.colors.primary };
+      return { fontSize: [16, 17, 19, 21], fontWeight: 700, fontFamily: theme.fonts.heading, as: 'h6', color: theme.colors.primary };
     case 'LargeLead':
-      return { fontSize: [18, 20, 22, 24], fontWeight: 500, fontFamily: fontFamilies.body, as: 'p' };
+      return { fontSize: [18, 20, 22, 24], fontWeight: 500, fontFamily: theme.fonts.body, as: 'p' };
     case 'SmallLead':
-      return { fontSize: [17, 18, 19, 21], fontWeight: 500, fontFamily: fontFamilies.body, as: 'p' };
+      return { fontSize: [17, 18, 19, 21], fontWeight: 500, fontFamily: theme.fonts.body, as: 'p' };
     case 'Paragraph':
-      return { fontSize: [14, 15, 15, 16], fontWeight: 300, fontFamily: fontFamilies.body, as: 'p' };
+      return { fontSize: [14, 15, 15, 16], fontWeight: 300, fontFamily: theme.fonts.body, as: 'p' };
     case 'SmallParagraph':
-      return { fontSize: [13, 14, 14, 15], fontWeight: 300, fontFamily: fontFamilies.body, as: 'p' };
+      return { fontSize: [13, 14, 14, 15], fontWeight: 300, fontFamily: theme.fonts.body, as: 'p' };
     case 'Link':
-      return { fontSize: [14, 15, 15, 16], fontWeight: 700, fontFamily: fontFamilies.body, as: Link };
+      return { fontSize: [14, 15, 15, 16], fontWeight: 700, fontFamily: theme.fonts.body, as: Link };
   }
 };
 
-const basicStyles = (theme: Theme): BaseStyles => ({
+const basicStyles = (theme: IrsiTheme): BaseStyles => ({
   base: {},
 });
 
-export const Text: React.FC<TextProps | AnchorProps> = ({ children, variant = 'Paragraph', component, ...other }) => {
-  const themeContext = React.useContext(ThemeContext);
+export const Text: React.FC<TextProps | AnchorProps> = ({ children, variant = 'Paragraph', ...other }) => {
+  const Component = DynamicComponent;
+  const themeContext = React.useContext<IrsiTheme>(ThemeContext);
 
   const variantStyles = React.useMemo(() => getVariantStyles(themeContext, variant), [themeContext, variant]);
   const styles = React.useMemo(() => basicStyles(themeContext), [themeContext]);
 
+  Component.displayName = variant;
   return (
-    <DynamicComponent {...variantStyles} {...other}>
+    <Component {...variantStyles} {...other}>
       {children}
-    </DynamicComponent>
+    </Component>
   );
 };

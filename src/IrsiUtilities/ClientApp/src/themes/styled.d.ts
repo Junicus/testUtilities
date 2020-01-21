@@ -25,5 +25,9 @@ declare module 'styled-components' {
       xl: number;
       xxl: number;
     };
+    fonts: {
+      heading: string;
+      body: string;
+    };
   }
 }
