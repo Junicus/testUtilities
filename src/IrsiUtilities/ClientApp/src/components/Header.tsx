@@ -26,6 +26,10 @@ const HeaderContainer = styled(Box)`
   flex-direction: row;
   align-items: center;
   height: ${({ theme }) => theme.header.height}px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 `;
 
 const NavBrand = styled<React.FC<AnchorProps>>(Text)`

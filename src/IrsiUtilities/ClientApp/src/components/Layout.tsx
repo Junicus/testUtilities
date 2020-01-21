@@ -20,4 +20,5 @@ const MainContainer = styled.main(({ theme }) => ({
   color: theme.colors.onbackground,
   display: 'flex',
   flexDirection: 'row',
+  paddingTop: theme.header.height,
 }));
