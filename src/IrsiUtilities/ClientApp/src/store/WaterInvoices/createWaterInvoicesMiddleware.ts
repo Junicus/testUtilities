@@ -2,7 +2,7 @@ import { Middleware, MiddlewareAPI, Dispatch } from 'redux';
 import { KnownActions, AppState } from '../types';
 import { WaterInvoiceActions, WaterInvoiceActionTypes } from './types';
 import { WaterInvoicesClient } from '../../utils/api/IrsiUtilities';
-import userManager from '../Auth/userManager';
+import userManager from '../Auth2/userManager';
 import axios from 'axios';
 
 export const createWaterInvoicesMiddleware = (): Middleware => {
@@ -23,7 +23,7 @@ const getWaterInvoices = () => async (dispatch: Dispatch<WaterInvoiceActions>) =
   const client = new WaterInvoicesClient();
   client
     .get()
-    .then(model => {
+    .then((model) => {
       dispatch({
         type: WaterInvoiceActionTypes.GET_WATER_INVOICES_SUCCESS,
         payload: {
@@ -31,7 +31,7 @@ const getWaterInvoices = () => async (dispatch: Dispatch<WaterInvoiceActions>) =
         },
       });
     })
-    .catch(reason => {
+    .catch((reason) => {
       dispatch({
         type: WaterInvoiceActionTypes.GET_WATER_INVOICES_FAILED,
         payload: {

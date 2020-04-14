@@ -2,7 +2,7 @@ import { Middleware, MiddlewareAPI, Dispatch } from 'redux';
 import { KnownActions, AppState } from '../types';
 import { StoreActionTypes, StoreActions } from './types';
 import { StoresClient } from '../../utils/api/IrsiUtilities';
-import userManager from '../Auth/userManager';
+import userManager from '../Auth2/userManager';
 import axios from 'axios';
 
 export const createStoresMiddleware = (): Middleware => {
@@ -23,7 +23,7 @@ const getStores = () => async (dispatch: Dispatch<StoreActions>) => {
   const client = new StoresClient();
   client
     .get()
-    .then(model => {
+    .then((model) => {
       dispatch({
         type: StoreActionTypes.GET_STORES_SUCCESS,
         payload: {
@@ -31,7 +31,7 @@ const getStores = () => async (dispatch: Dispatch<StoreActions>) => {
         },
       });
     })
-    .catch(reason => {
+    .catch((reason) => {
       dispatch({
         type: StoreActionTypes.GET_STORES_FAILED,
         payload: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { CallbackComponent } from 'redux-oidc';
 
-import userManager from '../../store/Auth/userManager';
+import userManager from '../../store/Auth2/userManager';
 
 interface LoginCallbackPageProps extends RouteComponentProps {}
 
@@ -10,10 +10,10 @@ export const LoginCallbackPage: React.FC<LoginCallbackPageProps> = ({ history })
   return (
     <CallbackComponent
       userManager={userManager}
-      successCallback={user => {
+      successCallback={(user) => {
         history.push(user.state ? user.state.returnUrl : '/');
       }}
-      errorCallback={error => {
+      errorCallback={(error) => {
         history.push('/');
         console.error(error);
       }}

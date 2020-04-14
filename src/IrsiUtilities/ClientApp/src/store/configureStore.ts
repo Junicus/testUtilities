@@ -1,13 +1,13 @@
 import createOidcMiddleware from 'redux-oidc';
 import { Middleware, createStore, applyMiddleware, compose } from 'redux';
-import userManager from './Auth/userManager';
+import userManager from './Auth2/userManager';
 import { rootReducer } from './rootReducer';
 import { createStoresMiddleware } from './Stores/createStoresMiddleware';
 import { createElectricityInvoicesMiddleware } from './ElectricityInvoices/createElectricityInvoicesMiddleware';
 import { createWaterInvoicesMiddleware } from './WaterInvoices/createWaterInvoicesMiddleware';
 
 export const configureStore = () => {
-  userManager.events.addSilentRenewError(error => {
+  userManager.events.addSilentRenewError((error) => {
     console.error(`error while renewing the access token ${error}`);
   });
   const oidcMiddleware = createOidcMiddleware(userManager);

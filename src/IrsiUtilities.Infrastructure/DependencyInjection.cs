@@ -62,9 +62,10 @@ namespace IrsiUtilities.Infrastructure
                 services.AddIdentityServer()
                     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-                services.AddTransient<IDateTime, DateTimeService>();
                 services.AddTransient<IIdentityService, IdentityService>();
             }
+
+            services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
