@@ -10,30 +10,30 @@ namespace IrsiUtilities.Application.Stores.Commands
     public class CreateStoreCommand : IRequest<Guid>
     {
         public string Name { get; set; }
+    }
 
-        public class CreateStoreCommandHandler : IRequestHandler<CreateStoreCommand, Guid>
+    public class CreateStoreCommandHandler : IRequestHandler<CreateStoreCommand, Guid>
+    {
+        private readonly IApplicationDbContext _context;
+
+        public CreateStoreCommandHandler(IApplicationDbContext context)
         {
-            private readonly IApplicationDbContext _context;
-
-            public CreateStoreCommandHandler(IApplicationDbContext context)
-            {
-                _context = context;
-            }
-
-            public async Task<Guid> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
-            {
-                var entity = new Store
-                {
-                    Name = request.Name
-                };
-
-                _context.Stores.Add(entity);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return entity.Id;
-            }
-
+            _context = context;
         }
+
+        public async Task<Guid> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
+        {
+            var entity = new Store
+            {
+                Name = request.Name
+            };
+
+            _context.Stores.Add(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return entity.Id;
+        }
+
     }
 }

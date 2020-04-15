@@ -10,15 +10,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IrsiUtilities.Controllers
 {
-    
+
     public class StoresController : ApiController
     {
         [HttpGet]
+        [ActionName("GetAll")]
         [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(StoresVM), (int)StatusCodes.Status200OK)]
-        public async Task<ActionResult<StoresVM>> Get()
+        public async Task<ActionResult<StoresVM>> GetAll()
         {
             return await Mediator.Send(new GetStoresQuery());
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName("GetById")]
+        [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(StoreVM), (int)StatusCodes.Status200OK)]
+        public async Task<ActionResult<StoreVM>> GetById(Guid id)
+        {
+            return await Mediator.Send(new GetStoreQuery { Id = id });
         }
 
         [HttpPost]
@@ -29,5 +39,12 @@ namespace IrsiUtilities.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPut]
+        [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType((int)StatusCodes.Status200OK)]
+        public async Task Update(UpdateStoreCommand command)
+        {
+            await Mediator.Send(command);
+        }
     }
 }

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { KnownActions } from '../../store/types';
 import { StoreActionTypes } from '../../store/Stores/types';
 import { Dispatch } from 'redux';
+import { StoresTable } from './Tables/StoresTable';
 
 export const StoresPage: React.FC = () => {
   const dispatch = useDispatch<Dispatch<KnownActions>>();
@@ -14,7 +15,7 @@ export const StoresPage: React.FC = () => {
 
   return (
     <div style={{ flexGrow: 1 }}>
-      <h1>Stores</h1>
+      <StoresTable />
     </div>
   );
 };

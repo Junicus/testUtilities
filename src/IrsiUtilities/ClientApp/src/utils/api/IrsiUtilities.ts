@@ -180,8 +180,10 @@ export class OidcConfigurationClient implements IOidcConfigurationClient {
 }
 
 export interface IStoresClient {
-    get(): Promise<StoresVM>;
+    getAll(): Promise<StoresVM>;
     create(command: CreateStoreCommand): Promise<string>;
+    update(command: UpdateStoreCommand): Promise<void>;
+    getById(id: string): Promise<StoreVM>;
 }
 
 export class StoresClient implements IStoresClient {
@@ -194,7 +196,7 @@ export class StoresClient implements IStoresClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    get(): Promise<StoresVM> {
+    getAll(): Promise<StoresVM> {
         let url_ = this.baseUrl + "/api/Stores";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -207,11 +209,11 @@ export class StoresClient implements IStoresClient {
         };
 
         return this.instance.request(options_).then((_response: AxiosResponse) => {
-            return this.processGet(_response);
+            return this.processGetAll(_response);
         });
     }
 
-    protected processGet(response: AxiosResponse): Promise<StoresVM> {
+    protected processGetAll(response: AxiosResponse): Promise<StoresVM> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -288,6 +290,101 @@ export class StoresClient implements IStoresClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string>(<any>null);
+    }
+
+    update(command: UpdateStoreCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/Stores";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    getById(id: string): Promise<StoreVM> {
+        let url_ = this.baseUrl + "/api/Stores/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetById(_response);
+        });
+    }
+
+    protected processGetById(response: AxiosResponse): Promise<StoreVM> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = StoreVM.fromJS(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<StoreVM>(<any>null);
     }
 }
 
@@ -866,6 +963,7 @@ export interface IStoresVM {
 }
 
 export class StoreDto implements IStoreDto {
+    id!: string;
     name?: string | undefined;
 
     constructor(data?: IStoreDto) {
@@ -879,6 +977,7 @@ export class StoreDto implements IStoreDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.name = _data["name"];
         }
     }
@@ -892,13 +991,51 @@ export class StoreDto implements IStoreDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["name"] = this.name;
         return data; 
     }
 }
 
 export interface IStoreDto {
+    id: string;
     name?: string | undefined;
+}
+
+export class StoreVM implements IStoreVM {
+    store?: StoreDto | undefined;
+
+    constructor(data?: IStoreVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.store = _data["store"] ? StoreDto.fromJS(_data["store"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StoreVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StoreVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["store"] = this.store ? this.store.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IStoreVM {
+    store?: StoreDto | undefined;
 }
 
 export class CreateStoreCommand implements ICreateStoreCommand {
@@ -934,6 +1071,46 @@ export class CreateStoreCommand implements ICreateStoreCommand {
 }
 
 export interface ICreateStoreCommand {
+    name?: string | undefined;
+}
+
+export class UpdateStoreCommand implements IUpdateStoreCommand {
+    id?: string;
+    name?: string | undefined;
+
+    constructor(data?: IUpdateStoreCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UpdateStoreCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStoreCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUpdateStoreCommand {
+    id?: string;
     name?: string | undefined;
 }
 

@@ -125,7 +125,7 @@
         "tags": [
           "Stores"
         ],
-        "operationId": "Stores_Get",
+        "operationId": "Stores_GetAll",
         "responses": {
           "401": {
             "description": "",
@@ -184,6 +184,81 @@
                 "schema": {
                   "type": "string",
                   "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Stores"
+        ],
+        "operationId": "Stores_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Stores/{id}": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "operationId": "Stores_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreVM"
                 }
               }
             }
@@ -596,10 +671,32 @@
       "StoreDto": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "id"
+        ],
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
           "name": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "StoreVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "store": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StoreDto"
+              }
+            ]
           }
         }
       },
@@ -607,6 +704,20 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateStoreCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
           "name": {
             "type": "string",
             "nullable": true
