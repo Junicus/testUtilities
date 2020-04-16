@@ -14,11 +14,22 @@ namespace IrsiUtilities.Controllers
     public class ElectricityInvoicesController : ApiController
     {
         [HttpGet]
+        [ActionName("GetAll")]
         [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ElectricityInvoicesVM), (int)StatusCodes.Status200OK)]
-        public async Task<ActionResult<ElectricityInvoicesVM>> Get()
+        public async Task<ActionResult<ElectricityInvoicesVM>> GetAll()
         {
             return await Mediator.Send(new GetElectricityInvoicesQuery());
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName("GetById")]
+        [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ElectricityInvoiceVM), (int)StatusCodes.Status200OK)]
+        [ProducesResponseType((int)StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ElectricityInvoiceVM>> GetById(Guid id)
+        {
+            return await Mediator.Send(new GetElectricityInvoiceQuery { Id = id });
         }
 
         [HttpPost]
@@ -27,6 +38,15 @@ namespace IrsiUtilities.Controllers
         public async Task<ActionResult<Guid>> Create(CreateElectricityInvoiceCommand command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType((int)StatusCodes.Status200OK)]
+        [ProducesResponseType((int)StatusCodes.Status404NotFound)]
+        public async Task Update(UpdateElectricityInvoiceCommand command)
+        {
+            await Mediator.Send(command);
         }
     }
 }

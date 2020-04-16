@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IrsiUtilities.Controllers
 {
-
+    [Authorize]
     public class StoresController : ApiController
     {
         [HttpGet]
@@ -26,6 +26,7 @@ namespace IrsiUtilities.Controllers
         [ActionName("GetById")]
         [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(StoreVM), (int)StatusCodes.Status200OK)]
+        [ProducesResponseType((int)StatusCodes.Status404NotFound)]
         public async Task<ActionResult<StoreVM>> GetById(Guid id)
         {
             return await Mediator.Send(new GetStoreQuery { Id = id });
@@ -42,6 +43,7 @@ namespace IrsiUtilities.Controllers
         [HttpPut]
         [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
         [ProducesResponseType((int)StatusCodes.Status200OK)]
+        [ProducesResponseType((int)StatusCodes.Status404NotFound)]
         public async Task Update(UpdateStoreCommand command)
         {
             await Mediator.Send(command);

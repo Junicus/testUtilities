@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux';
 
 import { ElectricityInvoiceActionTypes } from '../../store/ElectricityInvoices/types';
 import { KnownActions } from '../../store/types';
+import { ElectricityInvoicesTable } from './Tables/ElectricityInvoicesTable';
 
-export const ElectricityInvoicesPage = () => {
+export const ElectricityInvoicesPage: React.FC = () => {
   const dispatch = useDispatch<Dispatch<KnownActions>>();
 
   React.useEffect(() => {
@@ -13,8 +14,8 @@ export const ElectricityInvoicesPage = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h1>Electricity Invoices</h1>
+    <div style={{ flexGrow: 1 }}>
+      <ElectricityInvoicesTable />
     </div>
   );
 };

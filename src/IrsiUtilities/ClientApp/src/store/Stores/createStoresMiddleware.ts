@@ -39,7 +39,7 @@ const getStores = () => async (dispatch: Dispatch<StoreActions>) => {
       dispatch({
         type: StoreActionTypes.GET_STORES_SUCCESS,
         payload: {
-          stores: model.stores ? model.stores : [],
+          stores: model.stores ?? [],
         },
       });
     })

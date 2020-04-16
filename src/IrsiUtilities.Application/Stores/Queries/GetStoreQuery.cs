@@ -26,7 +26,7 @@ namespace IrsiUtilities.Application.Stores.Queries
 
         public async Task<StoreVM> Handle(GetStoreQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Stores.FindAsync(request.Id);
+            var entity = await _context.Stores.FindAsync(new object[] { request.Id }, cancellationToken);
             if (entity == null)
             {
                 throw new EntityNotFoundException($"Store entity with id {request.Id} not found!");

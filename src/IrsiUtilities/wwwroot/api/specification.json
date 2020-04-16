@@ -11,7 +11,7 @@
         "tags": [
           "ElectricityInvoices"
         ],
-        "operationId": "ElectricityInvoices_Get",
+        "operationId": "ElectricityInvoices_GetAll",
         "responses": {
           "401": {
             "description": "",
@@ -85,6 +85,111 @@
             "JWT": []
           }
         ]
+      },
+      "put": {
+        "tags": [
+          "ElectricityInvoices"
+        ],
+        "operationId": "ElectricityInvoices_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateElectricityInvoiceCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/ElectricityInvoices/{id}": {
+      "get": {
+        "tags": [
+          "ElectricityInvoices"
+        ],
+        "operationId": "ElectricityInvoices_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElectricityInvoiceVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/_configuration/{clientId}": {
@@ -147,7 +252,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -188,7 +298,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -220,8 +335,23 @@
           },
           "200": {
             "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Stores/{id}": {
@@ -262,8 +392,23 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/WaterInvoices": {
@@ -534,10 +679,149 @@
           2
         ]
       },
+      "ElectricityInvoiceVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "invoice": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElectricityInvoiceDto"
+              }
+            ]
+          }
+        }
+      },
       "CreateElectricityInvoiceCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usagekVA": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fixedCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "usagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ratekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalUsagekWh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateAdditionalUsagekWh": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "demandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additionalDemandCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "combustiblePurchased": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateCombustible": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "provisionalTarif": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateProvisionalTarif": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "energyPurchased": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "rateEnergy": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "celiRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHUse": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subsidioNHHRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "otherCharges": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
+      },
+      "UpdateElectricityInvoiceCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
           "invoiceDate": {
             "type": "string",
             "format": "date-time"

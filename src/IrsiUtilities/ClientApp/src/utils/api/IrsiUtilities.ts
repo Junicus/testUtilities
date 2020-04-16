@@ -10,8 +10,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export interface IElectricityInvoicesClient {
-    get(): Promise<ElectricityInvoicesVM>;
+    getAll(): Promise<ElectricityInvoicesVM>;
     create(command: CreateElectricityInvoiceCommand): Promise<string>;
+    update(command: UpdateElectricityInvoiceCommand): Promise<void>;
+    getById(id: string): Promise<ElectricityInvoiceVM>;
 }
 
 export class ElectricityInvoicesClient implements IElectricityInvoicesClient {
@@ -24,7 +26,7 @@ export class ElectricityInvoicesClient implements IElectricityInvoicesClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    get(): Promise<ElectricityInvoicesVM> {
+    getAll(): Promise<ElectricityInvoicesVM> {
         let url_ = this.baseUrl + "/api/ElectricityInvoices";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -37,11 +39,11 @@ export class ElectricityInvoicesClient implements IElectricityInvoicesClient {
         };
 
         return this.instance.request(options_).then((_response: AxiosResponse) => {
-            return this.processGet(_response);
+            return this.processGetAll(_response);
         });
     }
 
-    protected processGet(response: AxiosResponse): Promise<ElectricityInvoicesVM> {
+    protected processGetAll(response: AxiosResponse): Promise<ElectricityInvoicesVM> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -118,6 +120,113 @@ export class ElectricityInvoicesClient implements IElectricityInvoicesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string>(<any>null);
+    }
+
+    update(command: UpdateElectricityInvoiceCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/ElectricityInvoices";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    getById(id: string): Promise<ElectricityInvoiceVM> {
+        let url_ = this.baseUrl + "/api/ElectricityInvoices/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetById(_response);
+        });
+    }
+
+    protected processGetById(response: AxiosResponse): Promise<ElectricityInvoiceVM> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = ElectricityInvoiceVM.fromJS(resultData200);
+            return result200;
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ElectricityInvoiceVM>(<any>null);
     }
 }
 
@@ -331,6 +440,12 @@ export class StoresClient implements IStoresClient {
         } else if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(<any>null);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -380,6 +495,12 @@ export class StoresClient implements IStoresClient {
             let resultData200  = _responseText;
             result200 = StoreVM.fromJS(resultData200);
             return result200;
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -770,6 +891,42 @@ export enum ReadingType {
     Adjusted = 2,
 }
 
+export class ElectricityInvoiceVM implements IElectricityInvoiceVM {
+    invoice?: ElectricityInvoiceDto | undefined;
+
+    constructor(data?: IElectricityInvoiceVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invoice = _data["invoice"] ? ElectricityInvoiceDto.fromJS(_data["invoice"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ElectricityInvoiceVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new ElectricityInvoiceVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IElectricityInvoiceVM {
+    invoice?: ElectricityInvoiceDto | undefined;
+}
+
 export class CreateElectricityInvoiceCommand implements ICreateElectricityInvoiceCommand {
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
@@ -887,6 +1044,158 @@ export class CreateElectricityInvoiceCommand implements ICreateElectricityInvoic
 }
 
 export interface ICreateElectricityInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
+}
+
+export class UpdateElectricityInvoiceCommand implements IUpdateElectricityInvoiceCommand {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usagekVA?: number;
+    fixedCharge?: number;
+    usagekWh?: number;
+    ratekWh?: number;
+    additionalUsagekWh?: number;
+    rateAdditionalUsagekWh?: number;
+    demandCharge?: number;
+    additionalDemandCharge?: number;
+    combustiblePurchased?: number;
+    rateCombustible?: number;
+    provisionalTarif?: number;
+    rateProvisionalTarif?: number;
+    energyPurchased?: number;
+    rateEnergy?: number;
+    celiUse?: number;
+    celiRate?: number;
+    subsidioHHUse?: number;
+    subsidioHHRate?: number;
+    subsidioNHHUse?: number;
+    subsidioNHHRate?: number;
+    otherCharges?: number;
+    readingType?: ReadingType;
+
+    constructor(data?: IUpdateElectricityInvoiceCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usagekVA = _data["usagekVA"];
+            this.fixedCharge = _data["fixedCharge"];
+            this.usagekWh = _data["usagekWh"];
+            this.ratekWh = _data["ratekWh"];
+            this.additionalUsagekWh = _data["additionalUsagekWh"];
+            this.rateAdditionalUsagekWh = _data["rateAdditionalUsagekWh"];
+            this.demandCharge = _data["demandCharge"];
+            this.additionalDemandCharge = _data["additionalDemandCharge"];
+            this.combustiblePurchased = _data["combustiblePurchased"];
+            this.rateCombustible = _data["rateCombustible"];
+            this.provisionalTarif = _data["provisionalTarif"];
+            this.rateProvisionalTarif = _data["rateProvisionalTarif"];
+            this.energyPurchased = _data["energyPurchased"];
+            this.rateEnergy = _data["rateEnergy"];
+            this.celiUse = _data["celiUse"];
+            this.celiRate = _data["celiRate"];
+            this.subsidioHHUse = _data["subsidioHHUse"];
+            this.subsidioHHRate = _data["subsidioHHRate"];
+            this.subsidioNHHUse = _data["subsidioNHHUse"];
+            this.subsidioNHHRate = _data["subsidioNHHRate"];
+            this.otherCharges = _data["otherCharges"];
+            this.readingType = _data["readingType"];
+        }
+    }
+
+    static fromJS(data: any): UpdateElectricityInvoiceCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateElectricityInvoiceCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usagekVA"] = this.usagekVA;
+        data["fixedCharge"] = this.fixedCharge;
+        data["usagekWh"] = this.usagekWh;
+        data["ratekWh"] = this.ratekWh;
+        data["additionalUsagekWh"] = this.additionalUsagekWh;
+        data["rateAdditionalUsagekWh"] = this.rateAdditionalUsagekWh;
+        data["demandCharge"] = this.demandCharge;
+        data["additionalDemandCharge"] = this.additionalDemandCharge;
+        data["combustiblePurchased"] = this.combustiblePurchased;
+        data["rateCombustible"] = this.rateCombustible;
+        data["provisionalTarif"] = this.provisionalTarif;
+        data["rateProvisionalTarif"] = this.rateProvisionalTarif;
+        data["energyPurchased"] = this.energyPurchased;
+        data["rateEnergy"] = this.rateEnergy;
+        data["celiUse"] = this.celiUse;
+        data["celiRate"] = this.celiRate;
+        data["subsidioHHUse"] = this.subsidioHHUse;
+        data["subsidioHHRate"] = this.subsidioHHRate;
+        data["subsidioNHHUse"] = this.subsidioNHHUse;
+        data["subsidioNHHRate"] = this.subsidioNHHRate;
+        data["otherCharges"] = this.otherCharges;
+        data["readingType"] = this.readingType;
+        return data; 
+    }
+}
+
+export interface IUpdateElectricityInvoiceCommand {
+    id?: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;

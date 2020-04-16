@@ -1,26 +1,23 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { IStoreDto } from '../../../utils/api/IrsiUtilities';
+import { IElectricityInvoiceDto } from '../../../utils/api/IrsiUtilities';
 
-interface AddStoreFormProps {
-  onAddStore: (values: IStoreDto) => void;
+interface EditElectricityInvoiceFormProps {
+  initialValues: IElectricityInvoiceDto;
+  onUpdateElectricityInvoice: (values: IElectricityInvoiceDto) => void;
 }
 
-export function AddStoreForm({ onAddStore }: AddStoreFormProps) {
-  const initialValues: IStoreDto = { id: '', name: '' };
+export function EditElectricityInvoiceForm({ initialValues, onUpdateElectricityInvoice }: EditElectricityInvoiceFormProps) {
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values, { setSubmitting }) => {
-        onAddStore(values);
+        onUpdateElectricityInvoice(values);
         setSubmitting(false);
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit, errors, touched, isSubmitting }) => (
         <form autoComplete="off" onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input id="name" type="text" name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
-          {errors.name && touched.name && errors.name}
           <button type="submit" disabled={isSubmitting}>
             Submit
           </button>
