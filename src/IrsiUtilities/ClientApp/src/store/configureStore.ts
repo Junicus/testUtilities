@@ -1,6 +1,6 @@
 import createOidcMiddleware from 'redux-oidc';
 import { Middleware, createStore, applyMiddleware, compose } from 'redux';
-import userManager from './Auth2/userManager';
+import userManager from './Auth/userManager';
 import { rootReducer } from './rootReducer';
 import { createStoresMiddleware } from './Stores/createStoresMiddleware';
 import { createElectricityInvoicesMiddleware } from './ElectricityInvoices/createElectricityInvoicesMiddleware';

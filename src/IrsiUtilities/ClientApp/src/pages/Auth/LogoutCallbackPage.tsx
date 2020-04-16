@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { SignoutCallbackComponent } from 'redux-oidc';
 
-import userManager from '../../store/Auth2/userManager';
+import userManager from '../../store/Auth/userManager';
 
 interface LogoutCallbackPageProps extends RouteComponentProps {}
 

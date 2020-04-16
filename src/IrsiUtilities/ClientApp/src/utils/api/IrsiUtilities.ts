@@ -510,8 +510,10 @@ export class StoresClient implements IStoresClient {
 }
 
 export interface IWaterInvoicesClient {
-    get(): Promise<WaterInvoicesVM>;
+    getAll(): Promise<WaterInvoicesVM>;
     create(command: CreateWaterInvoiceCommand): Promise<string>;
+    update(command: UpdateWaterInvoiceCommand): Promise<void>;
+    getById(id: string): Promise<WaterInvoiceVM>;
 }
 
 export class WaterInvoicesClient implements IWaterInvoicesClient {
@@ -524,7 +526,7 @@ export class WaterInvoicesClient implements IWaterInvoicesClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    get(): Promise<WaterInvoicesVM> {
+    getAll(): Promise<WaterInvoicesVM> {
         let url_ = this.baseUrl + "/api/WaterInvoices";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -537,11 +539,11 @@ export class WaterInvoicesClient implements IWaterInvoicesClient {
         };
 
         return this.instance.request(options_).then((_response: AxiosResponse) => {
-            return this.processGet(_response);
+            return this.processGetAll(_response);
         });
     }
 
-    protected processGet(response: AxiosResponse): Promise<WaterInvoicesVM> {
+    protected processGetAll(response: AxiosResponse): Promise<WaterInvoicesVM> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -618,6 +620,113 @@ export class WaterInvoicesClient implements IWaterInvoicesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string>(<any>null);
+    }
+
+    update(command: UpdateWaterInvoiceCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/WaterInvoices";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    getById(id: string): Promise<WaterInvoiceVM> {
+        let url_ = this.baseUrl + "/api/WaterInvoices/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetById(_response);
+        });
+    }
+
+    protected processGetById(response: AxiosResponse): Promise<WaterInvoiceVM> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+        } else if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = WaterInvoiceVM.fromJS(resultData200);
+            return result200;
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<WaterInvoiceVM>(<any>null);
     }
 }
 
@@ -1559,6 +1668,42 @@ export interface IWaterInvoiceDto {
     readingType?: ReadingType;
 }
 
+export class WaterInvoiceVM implements IWaterInvoiceVM {
+    invoice?: WaterInvoiceDto | undefined;
+
+    constructor(data?: IWaterInvoiceVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invoice = _data["invoice"] ? WaterInvoiceDto.fromJS(_data["invoice"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): WaterInvoiceVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new WaterInvoiceVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IWaterInvoiceVM {
+    invoice?: WaterInvoiceDto | undefined;
+}
+
 export class CreateWaterInvoiceCommand implements ICreateWaterInvoiceCommand {
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
@@ -1631,6 +1776,98 @@ export class CreateWaterInvoiceCommand implements ICreateWaterInvoiceCommand {
 }
 
 export interface ICreateWaterInvoiceCommand {
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+}
+
+export class UpdateWaterInvoiceCommand implements IUpdateWaterInvoiceCommand {
+    id?: string;
+    invoiceDate?: Date;
+    invoiceNumber?: string | undefined;
+    storeId?: string;
+    amount?: number;
+    waterCharge?: number;
+    stormDrainCharge?: number;
+    ccarCharge?: number;
+    specialCharge?: number;
+    fiscalPlanAdjustment?: number;
+    previousRead?: Date;
+    currentRead?: Date;
+    usageDays?: number;
+    usage?: number;
+    readingType?: ReadingType;
+
+    constructor(data?: IUpdateWaterInvoiceCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+            this.invoiceNumber = _data["invoiceNumber"];
+            this.storeId = _data["storeId"];
+            this.amount = _data["amount"];
+            this.waterCharge = _data["waterCharge"];
+            this.stormDrainCharge = _data["stormDrainCharge"];
+            this.ccarCharge = _data["ccarCharge"];
+            this.specialCharge = _data["specialCharge"];
+            this.fiscalPlanAdjustment = _data["fiscalPlanAdjustment"];
+            this.previousRead = _data["previousRead"] ? new Date(_data["previousRead"].toString()) : <any>undefined;
+            this.currentRead = _data["currentRead"] ? new Date(_data["currentRead"].toString()) : <any>undefined;
+            this.usageDays = _data["usageDays"];
+            this.usage = _data["usage"];
+            this.readingType = _data["readingType"];
+        }
+    }
+
+    static fromJS(data: any): UpdateWaterInvoiceCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateWaterInvoiceCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        data["invoiceNumber"] = this.invoiceNumber;
+        data["storeId"] = this.storeId;
+        data["amount"] = this.amount;
+        data["waterCharge"] = this.waterCharge;
+        data["stormDrainCharge"] = this.stormDrainCharge;
+        data["ccarCharge"] = this.ccarCharge;
+        data["specialCharge"] = this.specialCharge;
+        data["fiscalPlanAdjustment"] = this.fiscalPlanAdjustment;
+        data["previousRead"] = this.previousRead ? this.previousRead.toISOString() : <any>undefined;
+        data["currentRead"] = this.currentRead ? this.currentRead.toISOString() : <any>undefined;
+        data["usageDays"] = this.usageDays;
+        data["usage"] = this.usage;
+        data["readingType"] = this.readingType;
+        return data; 
+    }
+}
+
+export interface IUpdateWaterInvoiceCommand {
+    id?: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;

@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { AppRouter } from './AppRouter';
 
 import { configureStore } from './store/configureStore';
-import userManager from './store/Auth2/userManager';
+import userManager from './store/Auth/userManager';
 import { irsiTheme } from './themes';
 
 const store = configureStore();

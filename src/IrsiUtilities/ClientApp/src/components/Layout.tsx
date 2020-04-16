@@ -15,10 +15,10 @@ export const Layout: React.FC = ({ children }) => {
   );
 };
 
-const MainContainer = styled.main(({ theme }) => ({
-  backgroundColor: theme.colors.background,
-  color: theme.colors.onbackground,
-  display: 'flex',
-  flexDirection: 'row',
-  paddingTop: theme.header.height,
-}));
+const MainContainer = styled.main`
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.onbackground};
+  display: flex;
+  flex-direction: row;
+  padding-top: ${({ theme }) => theme.header.height}px;
+`;

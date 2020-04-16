@@ -416,7 +416,7 @@
         "tags": [
           "WaterInvoices"
         ],
-        "operationId": "WaterInvoices_Get",
+        "operationId": "WaterInvoices_GetAll",
         "responses": {
           "401": {
             "description": "",
@@ -480,6 +480,111 @@
                 "schema": {
                   "type": "string",
                   "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "WaterInvoices"
+        ],
+        "operationId": "WaterInvoices_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWaterInvoiceCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/WaterInvoices/{id}": {
+      "get": {
+        "tags": [
+          "WaterInvoices"
+        ],
+        "operationId": "WaterInvoices_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterInvoiceVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1086,10 +1191,89 @@
           }
         }
       },
+      "WaterInvoiceVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "invoice": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/WaterInvoiceDto"
+              }
+            ]
+          }
+        }
+      },
       "CreateWaterInvoiceCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "invoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "waterCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "stormDrainCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "ccarCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "specialCharge": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "fiscalPlanAdjustment": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentRead": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usage": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "readingType": {
+            "$ref": "#/components/schemas/ReadingType"
+          }
+        }
+      },
+      "UpdateWaterInvoiceCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
           "invoiceDate": {
             "type": "string",
             "format": "date-time"

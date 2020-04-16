@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { ThemeConsumer, DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 import { Box } from './Box';
 import { LoginMenu } from './LoginMenu';
 import { Text, AnchorProps } from './Typography/Text';

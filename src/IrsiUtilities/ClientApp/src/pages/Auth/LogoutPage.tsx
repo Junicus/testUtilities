@@ -1,5 +1,5 @@
 import React from 'react';
-import userManager from '../../store/Auth2/userManager';
+import userManager from '../../store/Auth/userManager';
 
 export const LogoutPage: React.FC = () => {
   React.useEffect(() => {

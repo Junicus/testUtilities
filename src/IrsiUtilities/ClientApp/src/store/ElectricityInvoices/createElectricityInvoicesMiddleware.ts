@@ -8,7 +8,7 @@ import {
   UpdateElectricityInvoiceCommand,
 } from '../../utils/api/IrsiUtilities';
 import axios from 'axios';
-import userManager from '../Auth2/userManager';
+import userManager from '../Auth/userManager';
 
 export const createElectricityInvoicesMiddleware = (): Middleware => {
   return ({ getState, dispatch }: MiddlewareAPI<Dispatch<KnownActions>, AppState>) => (next: Dispatch) => (action: KnownActions) => {

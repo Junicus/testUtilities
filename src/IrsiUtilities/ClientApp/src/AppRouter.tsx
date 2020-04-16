@@ -14,6 +14,10 @@ import { ElectricityInvoicesPage } from './pages/ElectricityInvoices/Electricity
 import { AddStorePage } from './pages/Stores/AddStorePage';
 import { EditStorePage } from './pages/Stores/EditStorePage';
 import { NotFoundPage } from './pages/NotFound/NotFoundPage';
+import { AddElectricityInvoicePage } from './pages/ElectricityInvoices/AddElectricityInvoicePage';
+import { EditElectricityInvoicePage } from './pages/ElectricityInvoices/EditElectricityInvoicePage';
+import { AddWaterInvoicePage } from './pages/WaterInvoices/AddWaterInvoicePage';
+import { EditWaterInvoicePage } from './pages/WaterInvoices/EditWaterInvoicePage';
 
 export const AppRouter: React.FC = () => {
   const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -31,7 +35,11 @@ export const AppRouter: React.FC = () => {
           <AuthedRoute exact path="/stores/add" component={AddStorePage} />
           <AuthedRoute exact path="/stores/edit/:id" component={EditStorePage} />
           <AuthedRoute exact path="/water" component={WaterInvoicesPage} />
+          <AuthedRoute exact path="/water/add" component={AddWaterInvoicePage} />
+          <AuthedRoute exact path="/water/edit/:id" component={EditWaterInvoicePage} />
           <AuthedRoute exact path="/electricity" component={ElectricityInvoicesPage} />
+          <AuthedRoute exact path="/electricity/add" component={AddElectricityInvoicePage} />
+          <AuthedRoute exact path="/electricity/edit/:id" component={EditElectricityInvoicePage} />
           <Route component={NotFoundPage} />
         </Switch>
       </Layout>
