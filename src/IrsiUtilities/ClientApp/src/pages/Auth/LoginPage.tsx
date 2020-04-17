@@ -7,7 +7,7 @@ interface LoginPageProps extends RouteComponentProps {}
 export const LoginPage: React.FC<LoginPageProps> = ({ location }) => {
   React.useEffect(() => {
     userManager.signinRedirect({ data: location.state });
-  }, []);
+  }, [location]);
 
   return (
     <div>

@@ -38,8 +38,13 @@ export function EditStorePage() {
     [dispatch, history]
   );
 
+  const handleBackClick = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
   return (
     <div>
+      <button onClick={handleBackClick}>Back</button>
       <h1>Edit Store</h1>
       {store && (
         <div>

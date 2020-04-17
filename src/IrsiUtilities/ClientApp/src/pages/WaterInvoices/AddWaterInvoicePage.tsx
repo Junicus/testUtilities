@@ -23,10 +23,14 @@ export function AddWaterInvoicePage() {
     [dispatch, history]
   );
 
+  const handleBackClick = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
   return (
     <div style={{ flexGrow: 1 }}>
-      <button>back</button>
-      <h1>Add Electricity Invoice</h1>
+      <button onClick={handleBackClick}>back</button>
+      <h1>Add Water Invoice</h1>
       <AddWaterInvoiceForm onAddWaterInvoice={handleAddWaterInvoice} />
     </div>
   );

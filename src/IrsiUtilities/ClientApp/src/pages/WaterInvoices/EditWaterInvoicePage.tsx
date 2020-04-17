@@ -37,8 +37,13 @@ export function EditWaterInvoicePage() {
     [dispatch, history]
   );
 
+  const handleBackClick = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
   return (
     <div>
+      <button onClick={handleBackClick}>Back</button>
       <h1>Edit Electricity Invoice</h1>
       {invoice && (
         <div>

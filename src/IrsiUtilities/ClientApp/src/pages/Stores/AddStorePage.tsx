@@ -24,9 +24,13 @@ export const AddStorePage: React.FC = () => {
     [dispatch, history]
   );
 
+  const handleBackClick = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
   return (
     <div style={{ flexGrow: 1 }}>
-      <button>back</button>
+      <button onClick={handleBackClick}>back</button>
       <h1>Add Store</h1>
       <AddStoreForm onAddStore={handleAddStore} />
     </div>
