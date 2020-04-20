@@ -29,7 +29,7 @@ export function EditElectricityInvoiceForm({ initialValues, onUpdateElectricityI
         setSubmitting(false);
       }}
     >
-      {({ values, handleChange, handleBlur, handleSubmit, errors, touched, isSubmitting }) => (
+      {({ handleSubmit, isSubmitting }) => (
         <form autoComplete="off" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="invoiceDate">Invoice Date</label>
