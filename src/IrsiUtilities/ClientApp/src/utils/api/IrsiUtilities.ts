@@ -843,7 +843,7 @@ export interface IElectricityInvoicesVM {
 }
 
 export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
-    id?: string;
+    id!: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;
@@ -962,7 +962,7 @@ export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
 }
 
 export interface IElectricityInvoiceDto {
-    id?: string;
+    id: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;
@@ -1577,7 +1577,7 @@ export interface IWaterInvoicesVM {
 }
 
 export class WaterInvoiceDto implements IWaterInvoiceDto {
-    id?: string;
+    id!: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;
@@ -1651,7 +1651,7 @@ export class WaterInvoiceDto implements IWaterInvoiceDto {
 }
 
 export interface IWaterInvoiceDto {
-    id?: string;
+    id: string;
     invoiceDate?: Date;
     invoiceNumber?: string | undefined;
     storeId?: string;

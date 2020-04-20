@@ -648,10 +648,14 @@
       "ElectricityInvoiceDto": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "id"
+        ],
         "properties": {
           "id": {
             "type": "string",
-            "format": "guid"
+            "format": "guid",
+            "minLength": 1
           },
           "invoiceDate": {
             "type": "string",
@@ -1129,10 +1133,14 @@
       "WaterInvoiceDto": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "id"
+        ],
         "properties": {
           "id": {
             "type": "string",
-            "format": "guid"
+            "format": "guid",
+            "minLength": 1
           },
           "invoiceDate": {
             "type": "string",

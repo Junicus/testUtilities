@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using IrsiUtilities.Application.Common.Helpers;
 using IrsiUtilities.Application.Common.Mappings;
 using IrsiUtilities.Domain.Entities;
@@ -9,6 +10,7 @@ namespace IrsiUtilities.Application.WaterInvoices.Queries
 {
     public class WaterInvoiceDto : IMapFrom<WaterInvoice>
     {
+        [Required]
         public Guid Id { get; set; }
         [JsonConverter(typeof(JsonDateConverter))]
         public DateTime InvoiceDate { get; set; }

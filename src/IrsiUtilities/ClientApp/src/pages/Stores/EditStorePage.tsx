@@ -8,7 +8,6 @@ import { Dispatch } from 'redux';
 import { StoreActionTypes } from '../../store/Stores/types';
 
 export function EditStorePage() {
-  //const location = useLocation<{ redirect: boolean }>();
   const match = useRouteMatch<{ id: string }>();
   const dispatch = useDispatch<Dispatch<KnownActions>>();
   const history = useHistory();

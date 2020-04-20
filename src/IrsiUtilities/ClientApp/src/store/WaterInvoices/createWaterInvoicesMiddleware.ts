@@ -39,7 +39,7 @@ const getWaterInvoices = () => async (dispatch: Dispatch<WaterInvoiceActions>) =
       dispatch({
         type: WaterInvoiceActionTypes.GET_WATER_INVOICES_SUCCESS,
         payload: {
-          invoices: model.invoices,
+          invoices: model.invoices || [],
         },
       });
     })

@@ -1,4 +1,4 @@
-import { WaterInvoiceDto, IWaterInvoiceDto } from '../../utils/api/IrsiUtilities';
+import { IWaterInvoiceDto } from '../../utils/api/IrsiUtilities';
 
 export interface WaterInvoicesState {
   byId: Record<string, IWaterInvoiceDto>;
@@ -30,7 +30,7 @@ export interface GetWaterInvoicesAction {
 export interface GetWaterInvoicesSuccessAction {
   type: typeof WaterInvoiceActionTypes.GET_WATER_INVOICES_SUCCESS;
   payload: {
-    invoices?: WaterInvoiceDto[];
+    invoices: IWaterInvoiceDto[];
   };
 }
 

@@ -7,6 +7,15 @@ import { useHistory } from 'react-router-dom';
 
 export interface StoresTableProps {}
 
+// TODO: to fix issue with rendering pagination https://github.com/jbetancur/react-data-table-component/issues/500
+const customStyle = {
+  tableWrapper: {
+    style: {
+      display: 'block',
+    },
+  },
+};
+
 export function StoresTable(props: StoresTableProps) {
   const stores = useSelector<AppState, IStoreDto[]>((state) => state.stores.allIds.map((id) => state.stores.byId[id]));
   const history = useHistory();
@@ -31,6 +40,7 @@ export function StoresTable(props: StoresTableProps) {
       {
         selector: 'name',
         name: 'Name',
+        sortable: true,
       },
       {
         name: 'Actions',
@@ -55,6 +65,7 @@ export function StoresTable(props: StoresTableProps) {
         columns={columns}
         data={stores}
         pagination
+        customStyles={customStyle}
       />
     </>
   );
