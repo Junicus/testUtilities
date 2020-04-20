@@ -72,7 +72,7 @@ export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
   const columns = useMemo<IDataTableColumn<IElectricityInvoiceDto>[]>(
     () => [
       { name: 'Invoice Number', selector: 'invoiceNumber', sortable: true },
-      { name: 'Invoice Date', cell: (row) => row.invoiceDate?.toLocaleDateString() },
+      { name: 'Invoice Date', selector: 'invoiceDate', sortable: true },
       { name: 'Amount ($)', selector: 'amount' },
       {
         name: 'Actions',

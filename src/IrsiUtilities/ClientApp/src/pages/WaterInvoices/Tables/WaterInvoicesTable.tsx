@@ -27,7 +27,7 @@ const FilterComponent = ({
 }) => {
   return (
     <>
-      <input id="search" type="text" placeholder="Filter By Invoice Number" value={filterText} onChange={onFilter} autoComplete='off' />
+      <input id="search" type="text" placeholder="Filter By Invoice Number" value={filterText} onChange={onFilter} autoComplete="off" />
       <button type="button" onClick={onClear}>
         Clear
       </button>
@@ -72,7 +72,7 @@ export function WaterInvoicesTable(props: WaterInvoicesTableProps) {
   const columns = useMemo<IDataTableColumn<IWaterInvoiceDto>[]>(
     () => [
       { name: 'Invoice Number', selector: 'invoiceNumber', sortable: true },
-      { name: 'Invoice Date', cell: (row) => row.invoiceDate?.toLocaleDateString() },
+      { name: 'Invoice Date', selector: 'invoiceDate', sortable: true }, //row.invoiceDate?.toLocaleDateString() },
       { name: 'Amount ($)', selector: 'amount' },
       {
         name: 'Actions',
