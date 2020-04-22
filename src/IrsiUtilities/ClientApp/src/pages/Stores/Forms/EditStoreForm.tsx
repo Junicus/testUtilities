@@ -18,10 +18,16 @@ export function EditStoreForm({ initialValues, onUpdateStore }: EditStoreFormPro
     >
       {({ values, handleChange, handleBlur, handleSubmit, errors, touched, isSubmitting }) => (
         <form autoComplete="off" onSubmit={handleSubmit}>
-          <input id="id" type="hidden" name="id" value={values.id} />
-          <label htmlFor="name">Name</label>
-          <input id="name" type="text" name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
-          {errors.name && touched.name && errors.name}
+          <div>
+            <label htmlFor="name">Name</label>
+            <input id="name" type="text" name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
+            {errors.name && touched.name && errors.name}
+          </div>
+          <div>
+            <label htmlFor="costCenter">Cost Center</label>
+            <input id="costCenter" type="text" name="costCenter" value={values.costCenter} onChange={handleChange} onBlur={handleBlur} />
+            {errors.name && touched.name && errors.name}
+          </div>
           <button type="submit" disabled={isSubmitting}>
             Submit
           </button>

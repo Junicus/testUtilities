@@ -10,5 +10,6 @@ namespace IrsiUtilities.Application.Stores.Queries
         [Required]
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string CostCenter { get; set; }
     }
 }

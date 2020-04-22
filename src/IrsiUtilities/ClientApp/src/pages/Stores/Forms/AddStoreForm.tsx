@@ -18,9 +18,16 @@ export function AddStoreForm({ onAddStore }: AddStoreFormProps) {
     >
       {({ values, handleChange, handleBlur, handleSubmit, errors, touched, isSubmitting }) => (
         <form autoComplete="off" onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input id="name" type="text" name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
-          {errors.name && touched.name && errors.name}
+          <div>
+            <label htmlFor="name">Name</label>
+            <input id="name" type="text" name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
+            {errors.name && touched.name && errors.name}
+          </div>
+          <div>
+            <label htmlFor="costCenter">Cost Center</label>
+            <input id="costCenter" type="text" name="costCenter" value={values.costCenter} onChange={handleChange} onBlur={handleBlur} />
+            {errors.name && touched.name && errors.name}
+          </div>
           <button type="submit" disabled={isSubmitting}>
             Submit
           </button>

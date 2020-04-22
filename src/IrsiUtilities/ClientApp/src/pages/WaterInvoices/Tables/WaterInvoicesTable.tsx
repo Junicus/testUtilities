@@ -1,11 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { IWaterInvoiceDto } from '../../../utils/api/IrsiUtilities';
-import { AppState } from '../../../store/types';
+import { IWaterInvoiceDto, IStoreDto } from '../../../utils/api/IrsiUtilities';
 import { useHistory } from 'react-router-dom';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
+import { downloadCSV, waterInvoiceConverter } from '../../../utils/utilities';
+import { FilterByInvoiceNumber } from '../../../components/Filters/FilterByInvoiceNumber';
 
-export interface WaterInvoicesTableProps {}
+export interface WaterInvoicesTableProps {
+  invoices: IWaterInvoiceDto[];
+  stores: Record<string, IStoreDto>;
+}
 
 // TODO: to fix issue with rendering pagination https://github.com/jbetancur/react-data-table-component/issues/500
 const customStyle = {
@@ -16,33 +19,15 @@ const customStyle = {
   },
 };
 
-const FilterComponent = ({
-  filterText,
-  onFilter,
-  onClear,
-}: {
-  filterText: string;
-  onFilter: React.ChangeEventHandler<HTMLInputElement>;
-  onClear: () => void;
-}) => {
-  return (
-    <>
-      <input id="search" type="text" placeholder="Filter By Invoice Number" value={filterText} onChange={onFilter} autoComplete="off" />
-      <button type="button" onClick={onClear}>
-        Clear
-      </button>
-    </>
-  );
-};
-
-export function WaterInvoicesTable(props: WaterInvoicesTableProps) {
-  const invoices = useSelector<AppState, IWaterInvoiceDto[]>((state) =>
-    state.waterInvoices.allIds.map((id) => state.waterInvoices.byId[id])
-  );
+export function WaterInvoicesTable({ invoices, stores }: WaterInvoicesTableProps) {
   const history = useHistory();
-  const [filterText, setFilterText] = useState('');
+  const [filterInvoiceNumberText, setFilterInvoiceNumberText] = useState('');
+  const [filterDateText, setFilterDateText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const filteredInvoices = invoices.filter((item) => item.invoiceNumber && item.invoiceNumber.includes(filterText));
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [toggleCleared, setToggleClieared] = useState(false);
+
+  const filteredInvoices = invoices.filter((item) => item.invoiceNumber && item.invoiceNumber.includes(filterInvoiceNumberText));
 
   const handleAddWaterInvoiceClick = useCallback(() => {
     history.push('/water/add');
@@ -59,15 +44,33 @@ export function WaterInvoicesTable(props: WaterInvoicesTableProps) {
     console.log('Delete: ', record);
   }, []);
 
+  const handleRowSelected = useCallback((state) => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const contextAction = useMemo(() => {
+    const handleExport = () => {
+      downloadCSV<IWaterInvoiceDto>(selectedRows, stores, waterInvoiceConverter);
+      setToggleClieared(!toggleCleared);
+    };
+    return <button onClick={handleExport}>Export to Sage</button>;
+  }, [selectedRows, toggleCleared, stores]);
+
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
-      if (filterText) {
+      if (filterInvoiceNumberText) {
         setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText('');
+        setFilterInvoiceNumberText('');
       }
     };
-    return <FilterComponent onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
-  }, [filterText, resetPaginationToggle]);
+    return (
+      <FilterByInvoiceNumber
+        onFilter={(e) => setFilterInvoiceNumberText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterInvoiceNumberText}
+      />
+    );
+  }, [filterInvoiceNumberText, resetPaginationToggle]);
 
   const columns = useMemo<IDataTableColumn<IWaterInvoiceDto>[]>(
     () => [
@@ -98,6 +101,10 @@ export function WaterInvoicesTable(props: WaterInvoicesTableProps) {
         paginationResetDefaultPage={resetPaginationToggle}
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
+        selectableRows
+        contextActions={contextAction}
+        onSelectedRowsChange={handleRowSelected}
+        clearSelectedRows={toggleCleared}
         customStyles={customStyle}
       />
     </>

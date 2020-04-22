@@ -1,11 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IElectricityInvoiceDto } from '../../../utils/api/IrsiUtilities';
+import { IElectricityInvoiceDto, IStoreDto } from '../../../utils/api/IrsiUtilities';
 import { AppState } from '../../../store/types';
 import { useHistory } from 'react-router-dom';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
+import { FilterByInvoiceNumber } from '../../../components/Filters/FilterByInvoiceNumber';
+import { downloadCSV, electricityInvoiceConverter } from '../../../utils/utilities';
 
-export interface ElectricityInvoicesTableProps {}
+export interface ElectricityInvoicesTableProps {
+  invoices: IElectricityInvoiceDto[];
+  stores: Record<string, IStoreDto>;
+}
 
 // TODO: to fix issue with rendering pagination https://github.com/jbetancur/react-data-table-component/issues/500
 const customStyle = {
@@ -35,13 +40,12 @@ const FilterComponent = ({
   );
 };
 
-export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
-  const invoices = useSelector<AppState, IElectricityInvoiceDto[]>((state) =>
-    state.electricityInvoices.allIds.map((id) => state.electricityInvoices.byId[id])
-  );
+export function ElectricityInvoicesTable({ invoices, stores }: ElectricityInvoicesTableProps) {
   const history = useHistory();
   const [filterText, setFilterText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [toggleCleared, setToggleCleared] = useState(false);
   const filteredInvoices = invoices.filter((item) => item.invoiceNumber && item.invoiceNumber.includes(filterText));
 
   const handleAddElecticityInvoiceClick = useCallback(() => {
@@ -59,6 +63,18 @@ export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
     console.log('Delete: ', record);
   }, []);
 
+  const handleRowSelected = useCallback((state) => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const contextAction = useMemo(() => {
+    const handleExport = () => {
+      downloadCSV<IElectricityInvoiceDto>(selectedRows, stores, electricityInvoiceConverter);
+      setToggleCleared(!toggleCleared);
+    };
+    return <button onClick={handleExport}>Export to Sage</button>;
+  }, [selectedRows, toggleCleared, stores]);
+
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -66,7 +82,7 @@ export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
         setFilterText('');
       }
     };
-    return <FilterComponent onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+    return <FilterByInvoiceNumber onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
   }, [filterText, resetPaginationToggle]);
 
   const columns = useMemo<IDataTableColumn<IElectricityInvoiceDto>[]>(
@@ -87,8 +103,6 @@ export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
     [handleEditElectricityInvoiceClick, handleDeleteElectricityInvoice]
   );
 
-  console.log(invoices);
-
   return (
     <>
       <DataTable
@@ -100,6 +114,10 @@ export function ElectricityInvoicesTable(props: ElectricityInvoicesTableProps) {
         paginationResetDefaultPage={resetPaginationToggle}
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
+        selectableRows
+        contextActions={contextAction}
+        onSelectedRowsChange={handleRowSelected}
+        clearSelectedRows={toggleCleared}
         customStyles={customStyle}
       />
     </>

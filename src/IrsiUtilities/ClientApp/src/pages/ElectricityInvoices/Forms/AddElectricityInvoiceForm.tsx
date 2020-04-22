@@ -13,7 +13,7 @@ interface AddElecticityInvoiceFormProps {
 export function AddElectricityInvoiceForm({ onAddElectricityInvoice }: AddElecticityInvoiceFormProps) {
   const stores = useSelector<AppState, IStoreDto[]>((state) => state.stores.allIds.map((key) => state.stores.byId[key]));
   const dispatch = useDispatch<Dispatch<KnownActions>>();
-  const initialValues: IElectricityInvoiceDto = { id: '' };
+  const initialValues: IElectricityInvoiceDto = { id: '', storeId: '' };
 
   useEffect(() => {
     dispatch({

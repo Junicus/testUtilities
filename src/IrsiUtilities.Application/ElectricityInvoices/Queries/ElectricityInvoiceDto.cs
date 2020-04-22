@@ -15,6 +15,7 @@ namespace IrsiUtilities.Application.ElectricityInvoices.Queries
         [JsonConverter(typeof(JsonDateConverter))]
         public DateTime InvoiceDate { get; set; }
         public string InvoiceNumber { get; set; }
+        [Required]
         public Guid StoreId { get; set; }
         public decimal Amount { get; set; }
         [JsonConverter(typeof(JsonDateConverter))]

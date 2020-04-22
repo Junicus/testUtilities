@@ -859,7 +859,7 @@ export class ElectricityInvoiceDto implements IElectricityInvoiceDto {
     id!: string;
     invoiceDate?: string;
     invoiceNumber?: string | undefined;
-    storeId?: string;
+    storeId!: string;
     amount?: number;
     previousRead?: string;
     currentRead?: string;
@@ -978,7 +978,7 @@ export interface IElectricityInvoiceDto {
     id: string;
     invoiceDate?: string;
     invoiceNumber?: string | undefined;
-    storeId?: string;
+    storeId: string;
     amount?: number;
     previousRead?: string;
     currentRead?: string;
@@ -1396,6 +1396,7 @@ export interface IStoresVM {
 export class StoreDto implements IStoreDto {
     id!: string;
     name?: string | undefined;
+    costCenter?: string | undefined;
 
     constructor(data?: IStoreDto) {
         if (data) {
@@ -1410,6 +1411,7 @@ export class StoreDto implements IStoreDto {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.costCenter = _data["costCenter"];
         }
     }
 
@@ -1424,6 +1426,7 @@ export class StoreDto implements IStoreDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["costCenter"] = this.costCenter;
         return data; 
     }
 }
@@ -1431,6 +1434,7 @@ export class StoreDto implements IStoreDto {
 export interface IStoreDto {
     id: string;
     name?: string | undefined;
+    costCenter?: string | undefined;
 }
 
 export class StoreVM implements IStoreVM {
@@ -1471,6 +1475,7 @@ export interface IStoreVM {
 
 export class CreateStoreCommand implements ICreateStoreCommand {
     name?: string | undefined;
+    costCenter?: string | undefined;
 
     constructor(data?: ICreateStoreCommand) {
         if (data) {
@@ -1484,6 +1489,7 @@ export class CreateStoreCommand implements ICreateStoreCommand {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.costCenter = _data["costCenter"];
         }
     }
 
@@ -1497,17 +1503,20 @@ export class CreateStoreCommand implements ICreateStoreCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["costCenter"] = this.costCenter;
         return data; 
     }
 }
 
 export interface ICreateStoreCommand {
     name?: string | undefined;
+    costCenter?: string | undefined;
 }
 
 export class UpdateStoreCommand implements IUpdateStoreCommand {
     id?: string;
     name?: string | undefined;
+    costCenter?: string | undefined;
 
     constructor(data?: IUpdateStoreCommand) {
         if (data) {
@@ -1522,6 +1531,7 @@ export class UpdateStoreCommand implements IUpdateStoreCommand {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.costCenter = _data["costCenter"];
         }
     }
 
@@ -1536,6 +1546,7 @@ export class UpdateStoreCommand implements IUpdateStoreCommand {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["costCenter"] = this.costCenter;
         return data; 
     }
 }
@@ -1543,6 +1554,7 @@ export class UpdateStoreCommand implements IUpdateStoreCommand {
 export interface IUpdateStoreCommand {
     id?: string;
     name?: string | undefined;
+    costCenter?: string | undefined;
 }
 
 export class WaterInvoicesVM implements IWaterInvoicesVM {
@@ -1593,7 +1605,7 @@ export class WaterInvoiceDto implements IWaterInvoiceDto {
     id!: string;
     invoiceDate?: string;
     invoiceNumber?: string | undefined;
-    storeId?: string;
+    storeId!: string;
     amount?: number;
     waterCharge?: number;
     stormDrainCharge?: number;
@@ -1667,7 +1679,7 @@ export interface IWaterInvoiceDto {
     id: string;
     invoiceDate?: string;
     invoiceNumber?: string | undefined;
-    storeId?: string;
+    storeId: string;
     amount?: number;
     waterCharge?: number;
     stormDrainCharge?: number;

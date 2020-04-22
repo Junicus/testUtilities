@@ -33,12 +33,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -79,12 +74,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -127,12 +117,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/ElectricityInvoices/{id}": {
@@ -184,12 +169,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/_configuration/{clientId}": {
@@ -252,12 +232,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -298,12 +273,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -346,12 +316,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Stores/{id}": {
@@ -403,12 +368,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/WaterInvoices": {
@@ -438,12 +398,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -484,12 +439,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -532,12 +482,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/WaterInvoices/{id}": {
@@ -589,12 +534,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     }
   },
@@ -649,7 +589,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "id"
+          "id",
+          "storeId"
         ],
         "properties": {
           "id": {
@@ -667,7 +608,8 @@
           },
           "storeId": {
             "type": "string",
-            "format": "guid"
+            "format": "guid",
+            "minLength": 1
           },
           "amount": {
             "type": "number",
@@ -1076,6 +1018,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "costCenter": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1100,6 +1046,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "costCenter": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1112,6 +1062,10 @@
             "format": "guid"
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "costCenter": {
             "type": "string",
             "nullable": true
           }
@@ -1134,7 +1088,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "id"
+          "id",
+          "storeId"
         ],
         "properties": {
           "id": {
@@ -1152,7 +1107,8 @@
           },
           "storeId": {
             "type": "string",
-            "format": "guid"
+            "format": "guid",
+            "minLength": 1
           },
           "amount": {
             "type": "number",

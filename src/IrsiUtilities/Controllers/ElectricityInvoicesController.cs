@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IrsiUtilities.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ElectricityInvoicesController : ApiController
     {
         [HttpGet]

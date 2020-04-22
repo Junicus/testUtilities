@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../../../store/types';
 import { useHistory } from 'react-router-dom';
 
-export interface StoresTableProps {}
+export interface StoresTableProps {
+  stores: IStoreDto[];
+}
 
 // TODO: to fix issue with rendering pagination https://github.com/jbetancur/react-data-table-component/issues/500
 const customStyle = {
@@ -16,8 +18,7 @@ const customStyle = {
   },
 };
 
-export function StoresTable(props: StoresTableProps) {
-  const stores = useSelector<AppState, IStoreDto[]>((state) => state.stores.allIds.map((id) => state.stores.byId[id]));
+export function StoresTable({ stores }: StoresTableProps) {
   const history = useHistory();
 
   const handleAddStoreClick = useCallback(() => {
@@ -43,6 +44,11 @@ export function StoresTable(props: StoresTableProps) {
         sortable: true,
       },
       {
+        selector: 'costCenter',
+        name: 'Cost Center',
+        sortable: true,
+      },
+      {
         name: 'Actions',
         cell: (record: IStoreDto) => (
           <div>
@@ -54,8 +60,6 @@ export function StoresTable(props: StoresTableProps) {
     ],
     [handleEditStoreClick, handleDeleteStoreClick]
   );
-
-  console.log(stores);
 
   return (
     <>

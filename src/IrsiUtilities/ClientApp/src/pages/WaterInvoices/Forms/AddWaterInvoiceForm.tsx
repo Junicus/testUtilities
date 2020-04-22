@@ -13,7 +13,7 @@ interface AddWaterInvoiceFormProps {
 export function AddWaterInvoiceForm({ onAddWaterInvoice }: AddWaterInvoiceFormProps) {
   const stores = useSelector<AppState, IStoreDto[]>((state) => state.stores.allIds.map((key) => state.stores.byId[key]));
   const dispatch = useDispatch<Dispatch<KnownActions>>();
-  const initialValues: IWaterInvoiceDto = { id: '' };
+  const initialValues: IWaterInvoiceDto = { id: '', storeId: '' };
 
   useEffect(() => {
     dispatch({

@@ -10,6 +10,7 @@ namespace IrsiUtilities.Application.Stores.Commands
     public class CreateStoreCommand : IRequest<Guid>
     {
         public string Name { get; set; }
+        public string CostCenter { get; set; }
     }
 
     public class CreateStoreCommandHandler : IRequestHandler<CreateStoreCommand, Guid>
@@ -25,7 +26,8 @@ namespace IrsiUtilities.Application.Stores.Commands
         {
             var entity = new Store
             {
-                Name = request.Name
+                Name = request.Name,
+                CostCenter = request.CostCenter
             };
 
             _context.Stores.Add(entity);
@@ -34,6 +36,5 @@ namespace IrsiUtilities.Application.Stores.Commands
 
             return entity.Id;
         }
-
     }
 }

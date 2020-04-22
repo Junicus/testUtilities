@@ -32,6 +32,15 @@ export const AppRouter: React.FC = () => {
             <Route exact path="/authentication/login-callback" component={LoginCallbackPage} />
             <Route exact path="/authentication/logout-callback" component={LogoutCallbackPage} />
             <Route exact path="/" component={HomePage} />
+            {/* <Route exact path="/stores" component={StoresPage} />
+            <Route exact path="/stores/add" component={AddStorePage} />
+            <Route exact path="/stores/edit/:id" component={EditStorePage} />
+            <Route exact path="/water" component={WaterInvoicesPage} />
+            <Route exact path="/water/add" component={AddWaterInvoicePage} />
+            <Route exact path="/water/edit/:id" component={EditWaterInvoicePage} />
+            <Route exact path="/electricity" component={ElectricityInvoicesPage} />
+            <Route exact path="/electricity/add" component={AddElectricityInvoicePage} />
+            <Route exact path="/electricity/edit/:id" component={EditElectricityInvoicePage} /> */}
             <AuthedRoute exact path="/stores" component={StoresPage} />
             <AuthedRoute exact path="/stores/add" component={AddStorePage} />
             <AuthedRoute exact path="/stores/edit/:id" component={EditStorePage} />
