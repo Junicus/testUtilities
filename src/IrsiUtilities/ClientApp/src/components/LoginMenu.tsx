@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AppState } from '../store/types';
 import { Text, AnchorProps } from './Typography/Text';
@@ -12,7 +11,11 @@ interface AuthenticatedViewProps {
 interface AnonymousViewProps {}
 
 const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({ userName }) => {
-  return <></>;
+  return (
+    <>
+      <div>{userName}</div>
+    </>
+  );
 };
 
 const AnonymousView: React.FC<AnonymousViewProps> = () => {
@@ -26,8 +29,8 @@ const AnonymousView: React.FC<AnonymousViewProps> = () => {
 };
 
 export const LoginMenu: React.FC = () => {
-  const isAuthenticated = useSelector<AppState, boolean>(state => !!state.oidc.user);
-  const userName = useSelector<AppState, string | undefined>(state => state.oidc.user?.profile?.name);
+  const isAuthenticated = useSelector<AppState, boolean>((state) => !!state.oidc.user);
+  const userName = useSelector<AppState, string | undefined>((state) => state.oidc.user?.profile?.name);
 
   if (isAuthenticated) {
     return <AuthenticatedView userName={userName} />;
