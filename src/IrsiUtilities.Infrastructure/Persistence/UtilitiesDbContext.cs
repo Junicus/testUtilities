@@ -12,15 +12,14 @@ using Microsoft.Extensions.Options;
 
 namespace IrsiUtilities.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class UtilitiesDbContext : DbContext, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
 
-        public ApplicationDbContext(DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions,
+        public UtilitiesDbContext(DbContextOptions<UtilitiesDbContext> options,
             ICurrentUserService currentUserService,
-            IDateTime dateTime) : base(options, operationalStoreOptions)
+            IDateTime dateTime) : base(options)
         {
             _currentUserService = currentUserService;
             _dateTime = dateTime;

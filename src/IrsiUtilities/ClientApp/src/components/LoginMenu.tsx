@@ -14,6 +14,9 @@ const AuthenticatedView: React.FC<AuthenticatedViewProps> = ({ userName }) => {
   return (
     <>
       <div>{userName}</div>
+      <NavAction variant="Link" to="/logout">
+        Logout
+      </NavAction>
     </>
   );
 };

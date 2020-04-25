@@ -1,4 +1,5 @@
 ﻿using System;
+using IrsiUtilities.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,9 @@ namespace IrsiUtilities.Infrastructure.Persistence
             Console.WriteLine("Running Migrations...");
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var applicationContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var utilitiesContext = scope.ServiceProvider.GetService<UtilitiesDbContext>();
             applicationContext.Database.Migrate();
+            utilitiesContext.Database.Migrate();
         }
 
         private static void SeedIdentity(IServiceProvider serviceProvider, IConfiguration configuration)
