@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using IrsiUtilities.Application.Common.Exceptions;
 using IrsiUtilities.Application.ElectricityInvoices.Queries;
+using IrsiUtilities.Application.Stores.Commands;
 using IrsiUtilities.Application.Tests.Common;
 using IrsiUtilities.Infrastructure.Persistence;
 using Microsoft.VisualBasic;
@@ -36,6 +38,16 @@ namespace IrsiUtilities.Application.Tests.ElectricityInvoices.Queries
 
             result.ShouldBeOfType<ElectricityInvoiceVM>().ShouldNotBeNull();
             result.Invoice.Id.ShouldBe(expectedId);
+        }
+
+        [Fact]
+        public async Task GetElectricityInvoiceQuery_InvalidId_ShouldThrow()
+        {
+            var sut = new GetElectricityInvoiceQueryHandler(_context, _mapper);
+
+            await Should.ThrowAsync<EntityNotFoundException>(async () => await sut.Handle(
+                new GetElectricityInvoiceQuery { Id = Guid.NewGuid() }, CancellationToken.None
+            ));
         }
     }
 }
