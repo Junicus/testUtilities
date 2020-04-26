@@ -29,7 +29,7 @@ export const AddStorePage: React.FC = () => {
   }, [history]);
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <button onClick={handleBackClick}>back</button>
       <h1>Add Store</h1>
       <AddStoreForm onAddStore={handleAddStore} />

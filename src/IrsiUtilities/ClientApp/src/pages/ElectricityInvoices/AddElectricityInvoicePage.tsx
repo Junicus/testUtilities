@@ -28,7 +28,7 @@ export function AddElectricityInvoicePage() {
   }, [history]);
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <button onClick={handleBackClick}>back</button>
       <h1>Add Electricity Invoice</h1>
       <AddElectricityInvoiceForm onAddElectricityInvoice={handleAddElectricityInvoice} />

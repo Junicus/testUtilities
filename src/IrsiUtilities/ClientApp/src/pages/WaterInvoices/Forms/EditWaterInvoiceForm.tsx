@@ -91,7 +91,7 @@ export function EditWaterInvoiceForm({ initialValues, onUpdateWaterInvoice }: Ed
               </div>
               <div>
                 <div>
-                  Total: ${console.log(values)}
+                  Total: $
                   {(values.waterCharge ? parseFloat(values.waterCharge.toString()) : 0) +
                     (values.stormDrainCharge ? parseFloat(values.stormDrainCharge.toString()) : 0) +
                     (values.ccarCharge ? parseFloat(values.ccarCharge.toString()) : 0) +

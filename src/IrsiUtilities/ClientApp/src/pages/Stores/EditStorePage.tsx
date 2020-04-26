@@ -42,7 +42,7 @@ export function EditStorePage() {
   }, [history]);
 
   return (
-    <div>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <button onClick={handleBackClick}>Back</button>
       <h1>Edit Store</h1>
       {store && (

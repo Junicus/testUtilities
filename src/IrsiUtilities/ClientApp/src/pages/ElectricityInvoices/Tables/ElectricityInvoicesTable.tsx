@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IElectricityInvoiceDto, IStoreDto } from '../../../utils/api/IrsiUtilities';
-import { AppState } from '../../../store/types';
+import { AppState, KnownActions } from '../../../store/types';
 import { useHistory } from 'react-router-dom';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import { FilterByInvoiceNumber } from '../../../components/Filters/FilterByInvoiceNumber';
 import { downloadCSV, electricityInvoiceConverter } from '../../../utils/utilities';
+import { ElectricityInvoiceActionTypes } from '../../../store/ElectricityInvoices/types';
+import { Dispatch } from 'redux';
 
 export interface ElectricityInvoicesTableProps {
   invoices: IElectricityInvoiceDto[];
@@ -42,6 +44,7 @@ const FilterComponent = ({
 
 export function ElectricityInvoicesTable({ invoices, stores }: ElectricityInvoicesTableProps) {
   const history = useHistory();
+  const dispatch = useDispatch<Dispatch<KnownActions>>();
   const [filterText, setFilterText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -60,7 +63,7 @@ export function ElectricityInvoicesTable({ invoices, stores }: ElectricityInvoic
   );
 
   const handleDeleteElectricityInvoice = useCallback((record: IElectricityInvoiceDto) => {
-    console.log('Delete: ', record);
+    dispatch({ type: ElectricityInvoiceActionTypes.DELETE_ELECTRICITY_INVOICE, payload: { invoiceId: record.id } });
   }, []);
 
   const handleRowSelected = useCallback((state) => {

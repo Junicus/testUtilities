@@ -1,9 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
 import { IStoreDto } from '../../../utils/api/IrsiUtilities';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../store/types';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState, KnownActions } from '../../../store/types';
 import { useHistory } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import { StoreActionTypes } from '../../../store/Stores/types';
 
 export interface StoresTableProps {
   stores: IStoreDto[];
@@ -20,6 +22,7 @@ const customStyle = {
 
 export function StoresTable({ stores }: StoresTableProps) {
   const history = useHistory();
+  const dispatch = useDispatch<Dispatch<KnownActions>>();
 
   const handleAddStoreClick = useCallback(() => {
     history.push('/stores/add');
@@ -33,7 +36,7 @@ export function StoresTable({ stores }: StoresTableProps) {
   );
 
   const handleDeleteStoreClick = useCallback((record: IStoreDto) => {
-    console.log('Delete: ', record);
+    dispatch({ type: StoreActionTypes.DELETE_STORE, payload: { storeId: record.id } });
   }, []);
 
   const columns = useMemo<IDataTableColumn<IStoreDto>[]>(
@@ -53,7 +56,7 @@ export function StoresTable({ stores }: StoresTableProps) {
         cell: (record: IStoreDto) => (
           <div>
             <button onClick={() => handleEditStoreClick(record)}>Edit</button>
-            <button onClick={() => handleDeleteStoreClick(record)}>Delete</button>
+            {/* <button onClick={() => handleDeleteStoreClick(record)}>Delete</button> */}
           </div>
         ),
       },

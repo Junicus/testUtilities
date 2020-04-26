@@ -4,6 +4,10 @@ import { useHistory } from 'react-router-dom';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import { downloadCSV, waterInvoiceConverter } from '../../../utils/utilities';
 import { FilterByInvoiceNumber } from '../../../components/Filters/FilterByInvoiceNumber';
+import { WaterInvoiceActionTypes } from '../../../store/WaterInvoices/types';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import { KnownActions } from '../../../store/types';
 
 export interface WaterInvoicesTableProps {
   invoices: IWaterInvoiceDto[];
@@ -21,6 +25,7 @@ const customStyle = {
 
 export function WaterInvoicesTable({ invoices, stores }: WaterInvoicesTableProps) {
   const history = useHistory();
+  const dispatch = useDispatch<Dispatch<KnownActions>>();
   const [filterInvoiceNumberText, setFilterInvoiceNumberText] = useState('');
   const [filterDateText, setFilterDateText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -41,7 +46,7 @@ export function WaterInvoicesTable({ invoices, stores }: WaterInvoicesTableProps
   );
 
   const handleDeleteWaterInvoice = useCallback((record: IWaterInvoiceDto) => {
-    console.log('Delete: ', record);
+    dispatch({ type: WaterInvoiceActionTypes.DELETE_WATER_INVOICE, payload: { invoiceId: record.id } });
   }, []);
 
   const handleRowSelected = useCallback((state) => {

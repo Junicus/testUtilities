@@ -21,7 +21,7 @@ export const WaterInvoicesPage = () => {
   }, [dispatch]);
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <WaterInvoicesTable invoices={invoices} stores={stores} />
     </div>
   );

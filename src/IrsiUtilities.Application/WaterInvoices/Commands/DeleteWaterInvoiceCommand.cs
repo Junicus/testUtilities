@@ -24,7 +24,7 @@ namespace IrsiUtilities.Application.WaterInvoices.Commands
         public async Task<Unit> Handle(DeleteWaterInvoiceCommand request, CancellationToken cancellationToken)
         {
             var invoice = await _context.WaterInvoices.FindAsync(new object[] { request.Id }, cancellationToken);
-            if (invoice == null) throw new EntityNotFoundException($"Electricity Invoice entity wit id {request.Id} not found!");
+            if (invoice == null) throw new EntityNotFoundException($"Electricity Invoice entity with id {request.Id} not found!");
 
             _context.WaterInvoices.Remove(invoice);
 

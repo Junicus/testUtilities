@@ -39,6 +39,14 @@ export const reducer: Reducer<WaterInvoicesState, WaterInvoiceActions> = (state 
         ...state,
         byId: { ...state.byId, [action.metadata.invoice.id]: action.metadata.invoice },
       };
+    case WaterInvoiceActionTypes.DELETE_WATER_INVOICE_SUCCESS:
+      const newRecord = { ...state.byId };
+      delete newRecord[action.metadata.invoiceId];
+      return {
+        ...state,
+        byId: newRecord,
+        allIds: state.allIds.filter((id) => id !== action.metadata.invoiceId),
+      };
     default:
       return state;
   }

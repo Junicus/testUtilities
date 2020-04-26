@@ -14,6 +14,7 @@ const colors = {
   onerror: 'white',
 };
 const header = { height: 54 };
+const sidebar = { width: 240 };
 const space = [0, 2, 4, 8, 16, 32, 64];
 const fonts = {
   heading: 'Montserrat, serif',
@@ -29,6 +30,7 @@ export const irsiTheme: IrsiTheme = {
   breakpoints,
   colors,
   header,
+  sidebar,
   space: {
     none: space[0],
     xs: space[1],

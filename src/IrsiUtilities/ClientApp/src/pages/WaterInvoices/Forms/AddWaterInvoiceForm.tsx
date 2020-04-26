@@ -91,11 +91,11 @@ export function AddWaterInvoiceForm({ onAddWaterInvoice }: AddWaterInvoiceFormPr
             <div>
               <div>
                 Total: $
-                {(values.waterCharge ? values.waterCharge : 0) +
-                  (values.stormDrainCharge ? values.stormDrainCharge : 0) +
-                  (values.ccarCharge ? values.ccarCharge : 0) +
-                  (values.specialCharge ? values.specialCharge : 0) +
-                  (values.fiscalPlanAdjustment ? values.fiscalPlanAdjustment : 0)}
+                {(values.waterCharge ? parseFloat(values.waterCharge.toString()) : 0) +
+                  (values.stormDrainCharge ? parseFloat(values.stormDrainCharge.toString()) : 0) +
+                  (values.ccarCharge ? parseFloat(values.ccarCharge.toString()) : 0) +
+                  (values.specialCharge ? parseFloat(values.specialCharge.toString()) : 0) +
+                  (values.fiscalPlanAdjustment ? parseFloat(values.fiscalPlanAdjustment.toString()) : 0)}
               </div>
             </div>
           </fieldset>

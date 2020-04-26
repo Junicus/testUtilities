@@ -42,7 +42,7 @@ export function EditWaterInvoicePage() {
   }, [history]);
 
   return (
-    <div>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <button onClick={handleBackClick}>Back</button>
       <h1>Edit Water Invoice</h1>
       {invoice && (

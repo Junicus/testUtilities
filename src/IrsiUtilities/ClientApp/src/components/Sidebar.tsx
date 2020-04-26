@@ -29,7 +29,7 @@ export const Sidebar: React.FC = () => {
 const SidebarContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.colors.surface,
   color: theme.colors.onsurface,
-  width: 240,
+  width: theme.sidebar.width,
   height: `calc(100vh - ${theme.header.height}px)`,
 }));
 

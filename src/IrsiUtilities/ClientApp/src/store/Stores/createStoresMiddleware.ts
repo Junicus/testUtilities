@@ -24,10 +24,10 @@ export const createStoresMiddleware = (): Middleware => {
         updateStore(action.payload.store)(dispatch);
         break;
       }
-      case StoreActionTypes.DELETE_STORE: {
-        deleteStore(action.payload.storeId)(dispatch);
-        break;
-      }
+      //   case StoreActionTypes.DELETE_STORE: {
+      //     deleteStore(action.payload.storeId)(dispatch);
+      //     break;
+      //   }
     }
     next(action);
   };

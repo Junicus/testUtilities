@@ -20,6 +20,9 @@ declare module 'styled-components' {
     header: {
       height: number;
     };
+    sidebar: {
+      width: number;
+    };
     space: {
       none: number;
       xs: number;

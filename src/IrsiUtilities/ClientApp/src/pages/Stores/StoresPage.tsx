@@ -16,7 +16,7 @@ export const StoresPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{ height: 'calc(100vh - 54px)' }}>
       <StoresTable stores={stores} />
     </div>
   );
