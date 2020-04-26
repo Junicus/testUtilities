@@ -14,11 +14,11 @@ using Xunit;
 namespace IrsiUtilities.Application.Tests.WaterInvoices.Commands
 {
     [Collection("CommandCollection")]
-    public class UpdateWaterInvoiceCommandTests
+    public class UpdateWaterInvoiceCommandHandlerTests
     {
         private readonly UtilitiesDbContext _context;
 
-        public UpdateWaterInvoiceCommandTests(CommandTestsFixture fixture)
+        public UpdateWaterInvoiceCommandHandlerTests(CommandTestsFixture fixture)
         {
             _context = fixture.Context;
         }

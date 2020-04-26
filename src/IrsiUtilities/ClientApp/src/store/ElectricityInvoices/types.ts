@@ -117,7 +117,7 @@ export interface DeleteElectricityInvoiceAction {
 export interface DeleteElectricityInvoiceSuccessAction {
   type: typeof ElectricityInvoiceActionTypes.DELETE_ELECTRICITY_INVOICE_SUCCESS;
   metadata: {
-    invoice: IElectricityInvoiceDto;
+    invoiceId: string;
   };
 }
 

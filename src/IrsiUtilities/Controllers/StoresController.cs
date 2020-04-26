@@ -48,5 +48,14 @@ namespace IrsiUtilities.Controllers
         {
             await Mediator.Send(command);
         }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType((int)StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType((int)StatusCodes.Status200OK)]
+        [ProducesResponseType((int)StatusCodes.Status404NotFound)]
+        public async Task Delete(Guid id)
+        {
+            await Mediator.Send(new DeleteStoreCommand { Id = id });
+        }
     }
 }

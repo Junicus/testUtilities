@@ -24,6 +24,10 @@ export const createStoresMiddleware = (): Middleware => {
         updateStore(action.payload.store)(dispatch);
         break;
       }
+      case StoreActionTypes.DELETE_STORE: {
+        deleteStore(action.payload.storeId)(dispatch);
+        break;
+      }
     }
     next(action);
   };
@@ -115,5 +119,19 @@ const updateStore = (store: IStoreDto) => async (dispatch: Dispatch<StoreActions
     })
     .catch((reason) => {
       dispatch({ type: StoreActionTypes.UPDATE_STORE_FAILED, payload: { error: reason } });
+    });
+};
+
+const deleteStore = (storeId: string) => async (dispatch: Dispatch<StoreActions>) => {
+  const user = await userManager.getUser();
+  axios.defaults.headers.common['Authorization'] = `Bearer ${user?.access_token}`;
+  const client = new StoresClient();
+  client
+    .delete(storeId)
+    .then(() => {
+      dispatch({ type: StoreActionTypes.DELETE_STORE_SUCCESS, metadata: { storeId } });
+    })
+    .catch((reason) => {
+      dispatch({ type: StoreActionTypes.DELETE_STORE_FAILED, payload: { error: reason } });
     });
 };

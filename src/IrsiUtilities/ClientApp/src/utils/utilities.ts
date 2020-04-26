@@ -23,7 +23,7 @@ export function waterInvoiceConverter(invoices: IWaterInvoiceDto[], stores: Reco
   let result = '';
 
   const columnDelimiter = ',';
-  const lineDelimiter = '\n';
+  const lineDelimiter = '\r\n';
 
   result += getAPHeaders(columnDelimiter, lineDelimiter);
 
@@ -46,35 +46,9 @@ function convertWaterInvoice(
   lineDelimiter: string
 ) {
   let result = '';
-  result +=
-    [
-      '"1"',
-      batchnum,
-      index,
-      `"15${store.costCenter}AAA"`,
-      `"${invoice.invoiceNumber}"`,
-      `"${invoice.previousRead?.replace(/(\d+)-(\d+)-(\d+)/, '$2/$3/$1')}-${invoice.currentRead?.replace(
-        /(\d+)-(\d+)-(\d+)/,
-        '$2/$3/$1'
-      )}"`,
-      invoice.invoiceDate?.replace(/-/g, ''),
-    ].join(columnDelimiter) + lineDelimiter;
-  result +=
-    [
-      '"2"',
-      batchnum,
-      index,
-      10,
-      `"${invoice.usageDays}"`,
-      `"6363-${store.costCenter}"`,
-      `"6363-${store.costCenter}"`,
-      invoice.amount,
-      invoice.amount,
-      invoice.amount,
-    ].join(columnDelimiter) + lineDelimiter;
-  result +=
-    ['"3"', batchnum, index, 1, invoice.invoiceDate?.replace(/-/g, ''), invoice.amount, '', invoice.amount, ''].join(columnDelimiter) +
-    lineDelimiter;
+  result += createRecord1Water(invoice, store, batchnum, index, columnDelimiter, lineDelimiter);
+  result += createRecord2Water(invoice, store, batchnum, index, columnDelimiter, lineDelimiter);
+  result += createRecord3(invoice, batchnum, index, columnDelimiter, lineDelimiter);
 
   return result;
 }
@@ -82,8 +56,8 @@ function convertWaterInvoice(
 export function electricityInvoiceConverter(invoices: IElectricityInvoiceDto[], stores: Record<string, IStoreDto>) {
   let result = '';
 
-  const columnDelimiter = '\t';
-  const lineDelimiter = '\n';
+  const columnDelimiter = ',';
+  const lineDelimiter = '\r\n';
 
   result += getAPHeaders(columnDelimiter, lineDelimiter);
 
@@ -106,32 +80,9 @@ function convertElectricityInvoice(
   lineDelimiter: string
 ) {
   let result = '';
-  result +=
-    [
-      '"1"',
-      batchnum,
-      index,
-      `"15${store.costCenter}AEE"`,
-      `"${invoice.invoiceNumber}"`,
-      `${invoice.previousRead?.replace(/(\d+)-(\d+)-(\d+)/, '$2/$3/$1')}-${invoice.currentRead?.replace(/(\d+)-(\d+)-(\d+)/, '$2/$3/$1')}`,
-      invoice.invoiceDate?.replace(/-/g, ''),
-    ].join(columnDelimiter) + lineDelimiter;
-  result +=
-    [
-      '"2"',
-      batchnum,
-      index,
-      10,
-      `"${invoice.usageDays}"`,
-      `"6363-${store.costCenter}"`,
-      `"6363-${store.costCenter}"`,
-      invoice.amount,
-      invoice.amount,
-      invoice.amount,
-    ].join(columnDelimiter) + lineDelimiter;
-  result +=
-    ['"3"', batchnum, index, 1, invoice.invoiceDate?.replace(/-/g, ''), invoice.amount, '', invoice.amount, ''].join(columnDelimiter) +
-    lineDelimiter;
+  result += createRecord1Electricity(invoice, store, batchnum, index, columnDelimiter, lineDelimiter);
+  result += createRecord2Electricity(invoice, store, batchnum, index, columnDelimiter, lineDelimiter);
+  result += createRecord3(invoice, batchnum, index, columnDelimiter, lineDelimiter);
 
   return result;
 }
@@ -139,84 +90,138 @@ function convertElectricityInvoice(
 function getAPHeaders(columnDelimiter: string = ',', lineDelimiter: string = '\n') {
   let result = '';
 
-  const record1Headers = ['"RECTYPE"', '"CNTBTCH"', '"CNTITEM"', '"IDVEND"', '"IDINVC"', '"INVCDESC"', '"DATEINVC"'];
-  const record2Headers = [
-    '"RECTYPE"',
-    '"CNTBTCH"',
-    '"CNTITEM"',
-    '"CNTLINE"',
-    '"TEXTDESC"',
-    '"IDGLACCT"',
-    '"IDACCTTAX"',
-    '"AMTDIST"',
-    '"AMTDISTNET"',
-    '"AMTGLDIST"',
-  ];
-  const record3Headers = [
-    '"RECTYPE"',
-    '"CNTBTCH"',
-    '"CNTITEM"',
-    '"CNTPAYM"',
-    '"DATEDUE"',
-    '"AMTDUE"',
-    '"DATEDISC"',
-    '"AMTDISC"',
-    '"AMTDUEHC"',
-    '"AMTDISCHC"',
-  ];
-  const record4Headers = [
-    '"RECTYPE"',
-    '"CNTBTCH"',
-    '"CNTITEM"',
-    '"OPTFIELD"',
-    '"VALUE"',
-    '"TYPE"',
-    '"LENGTH"',
-    '"DECIMALS"',
-    '"ALLOWNULL"',
-    '"VALIDATE"',
-    '"SWSET"',
-    '"VALINDEX"',
-    '"VALIFTEXT"',
-    '"VALIFMONEY"',
-    '"VALIFNUM"',
-    '"VALIFLONG"',
-    '"VALIFBOOL"',
-    '"VALIFDATE"',
-    '"VALIFTIME"',
-    '"FDESC"',
-    '"VDESC"',
-  ];
-  const record5Headers = [
-    '"RECTYPE"',
-    '"CNTBTCH"',
-    '"CNTITEM"',
-    '"CNTLINE"',
-    '"OPTFIELD"',
-    '"VALUE"',
-    '"TYPE"',
-    '"LENGTH"',
-    '"DECIMALS"',
-    '"ALLOWNULL"',
-    '"VALIDATE"',
-    '"SWSET"',
-    '"VALINDEX"',
-    '"VALIFTEXT"',
-    '"VALIFMONEY"',
-    '"VALIFNUM"',
-    '"VALIFLONG"',
-    '"VALIFBOOL"',
-    '"VALIFDATE"',
-    '"VALIFTIME"',
-    '"FDESC"',
-    '"VDESC"',
-  ];
+  // prettier-ignore
+  const record1Headers = ["RECTYPE","CNTBTCH","CNTITEM","IDVEND","IDINVC","TEXTTRX","INVCDESC","DATEINVC","AMTINVCTOT","AMTDUE","AMTGROSTOT","AMTDUETC"];
+  // prettier-ignore
+  const record2Headers = ["RECTYPE","CNTBTCH","CNTITEM","CNTLINE","TEXTDESC","IDGLACCT","AMTDIST","AMTDISTNET","AMTGLDIST"];
+  // prettier-ignore
+  const record3Headers = ["RECTYPE","CNTBTCH","CNTITEM","CNTPAYM","DATEDUE","AMTDUE","DATEDISC","AMTDISC"];
+  // prettier-ignore
+  const record4Headers = ["RECTYPE"];
+  // prettier-ignore
+  const record5Headers = ["RECTYPE"];
 
-  result += record1Headers.join(columnDelimiter) + lineDelimiter;
-  result += record2Headers.join(columnDelimiter) + lineDelimiter;
-  result += record3Headers.join(columnDelimiter) + lineDelimiter;
-  result += record4Headers.join(columnDelimiter) + lineDelimiter;
-  result += record5Headers.join(columnDelimiter) + lineDelimiter;
+  result += record1Headers.map(wrapInQuotes).join(columnDelimiter) + lineDelimiter;
+  result += record2Headers.map(wrapInQuotes).join(columnDelimiter) + lineDelimiter;
+  result += record3Headers.map(wrapInQuotes).join(columnDelimiter) + lineDelimiter;
+  result += record4Headers.map(wrapInQuotes).join(columnDelimiter) + lineDelimiter;
+  result += record5Headers.map(wrapInQuotes).join(columnDelimiter) + lineDelimiter;
 
   return result;
+}
+
+function wrapInQuotes(data: string) {
+  return `"${data}"`;
+}
+
+function createRecord1Water(
+  invoice: IWaterInvoiceDto | IElectricityInvoiceDto,
+  store: IStoreDto,
+  batchnum: number,
+  index: number,
+  columnDelimiter: string,
+  lineDelimiter: string
+) {
+  return (
+    [
+      '"1"',
+      batchnum,
+      index,
+      `"15${store.costCenter}AAA"`,
+      `"${invoice.invoiceNumber}"`,
+      1,
+      `"${invoice.previousRead?.replace(/(\d+)-(\d+)-(\d+)/, '$2/$3/$1')}-${invoice.currentRead?.replace(
+        /(\d+)-(\d+)-(\d+)/,
+        '$2/$3/$1'
+      )}"`,
+      invoice.invoiceDate?.replace(/-/g, ''),
+      invoice.amount,
+      invoice.amount,
+      invoice.amount,
+    ].join(columnDelimiter) + lineDelimiter
+  );
+}
+
+function createRecord1Electricity(
+  invoice: IWaterInvoiceDto | IElectricityInvoiceDto,
+  store: IStoreDto,
+  batchnum: number,
+  index: number,
+  columnDelimiter: string,
+  lineDelimiter: string
+) {
+  return (
+    [
+      '"1"',
+      batchnum,
+      index,
+      `"15${store.costCenter}AEE"`,
+      `"${invoice.invoiceNumber}"`,
+      1,
+      `"${invoice.previousRead?.replace(/(\d+)-(\d+)-(\d+)/, '$2/$3/$1')}-${invoice.currentRead?.replace(
+        /(\d+)-(\d+)-(\d+)/,
+        '$2/$3/$1'
+      )}"`,
+      invoice.invoiceDate?.replace(/-/g, ''),
+      invoice.amount,
+      invoice.amount,
+      invoice.amount,
+    ].join(columnDelimiter) + lineDelimiter
+  );
+}
+
+function createRecord2Water(
+  invoice: IWaterInvoiceDto | IElectricityInvoiceDto,
+  store: IStoreDto,
+  batchnum: number,
+  index: number,
+  columnDelimiter: string,
+  lineDelimiter: string
+) {
+  return (
+    [
+      '"2"',
+      batchnum,
+      index,
+      10,
+      `"${invoice.usageDays}"`,
+      `"6363-${store.costCenter}"`,
+      invoice.amount,
+      invoice.amount,
+      invoice.amount,
+    ].join(columnDelimiter) + lineDelimiter
+  );
+}
+
+function createRecord2Electricity(
+  invoice: IWaterInvoiceDto | IElectricityInvoiceDto,
+  store: IStoreDto,
+  batchnum: number,
+  index: number,
+  columnDelimiter: string,
+  lineDelimiter: string
+) {
+  return (
+    [
+      '"2"',
+      batchnum,
+      index,
+      10,
+      `"${invoice.usageDays}"`,
+      `"6361-${store.costCenter}"`,
+      invoice.amount,
+      invoice.amount,
+      invoice.amount,
+    ].join(columnDelimiter) + lineDelimiter
+  );
+}
+
+function createRecord3(
+  invoice: IWaterInvoiceDto | IElectricityInvoiceDto,
+  batchnum: number,
+  index: number,
+  columnDelimiter: string,
+  lineDelimiter: string
+) {
+  return ['"3"', batchnum, index, 1, invoice.invoiceDate?.replace(/-/g, ''), invoice.amount, '', 0].join(columnDelimiter) + lineDelimiter;
 }

@@ -29,6 +29,10 @@ export const createElectricityInvoicesMiddleware = (): Middleware => {
         updateElectricityInvoice(action.payload.invoice)(dispatch);
         break;
       }
+      case ElectricityInvoiceActionTypes.DELETE_ELECTRICITY_INVOICE: {
+        deleteElectricityInvoice(action.payload.invoiceId)(dispatch);
+        break;
+      }
     }
     next(action);
   };
@@ -120,5 +124,19 @@ const updateElectricityInvoice = (invoice: IElectricityInvoiceDto) => async (dis
     })
     .catch((reason) => {
       dispatch({ type: ElectricityInvoiceActionTypes.UPDATE_ELECTRICITY_INVOICE_FAILED, payload: { error: reason } });
+    });
+};
+
+const deleteElectricityInvoice = (invoiceId: string) => async (dispatch: Dispatch<ElectricityInvoiceActions>) => {
+  var user = await userManager.getUser();
+  axios.defaults.headers.common['Authorization'] = `Bearer ${user?.access_token}`;
+  const client = new ElectricityInvoicesClient();
+  client
+    .delete(invoiceId)
+    .then(() => {
+      dispatch({ type: ElectricityInvoiceActionTypes.DELETE_ELECTRICITY_INVOICE_SUCCESS, metadata: { invoiceId } });
+    })
+    .catch((reason) => {
+      dispatch({ type: ElectricityInvoiceActionTypes.DELETE_ELECTRICITY_INVOICE_FAILED, payload: { error: reason } });
     });
 };

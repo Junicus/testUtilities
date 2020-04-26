@@ -24,6 +24,10 @@ export const createWaterInvoicesMiddleware = (): Middleware => {
         updateWaterInvoice(action.payload.invoice)(dispatch);
         break;
       }
+      case WaterInvoiceActionTypes.DELETE_WATER_INVOICE: {
+        deleteWaterInvoice(action.payload.invoiceId)(dispatch);
+        break;
+      }
     }
     next(action);
   };
@@ -115,5 +119,19 @@ const updateWaterInvoice = (invoice: IWaterInvoiceDto) => async (dispatch: Dispa
     })
     .catch((reason) => {
       dispatch({ type: WaterInvoiceActionTypes.UPDATE_WATER_INVOICE_FAILED, payload: { error: reason } });
+    });
+};
+
+const deleteWaterInvoice = (invoiceId: string) => async (dispatch: Dispatch<WaterInvoiceActions>) => {
+  const user = await userManager.getUser();
+  axios.defaults.headers.common['Authorization'] = `Bearer ${user?.access_token}`;
+  const client = new WaterInvoicesClient();
+  client
+    .delete(invoiceId)
+    .then(() => {
+      dispatch({ type: WaterInvoiceActionTypes.DELETE_WATER_INVOICE_SUCCESS, metadata: { invoiceId } });
+    })
+    .catch((reason) => {
+      dispatch({ type: WaterInvoiceActionTypes.DELETE_WATER_INVOICE_FAILED, payload: { error: reason } });
     });
 };

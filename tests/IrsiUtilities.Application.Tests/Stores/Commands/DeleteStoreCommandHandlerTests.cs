@@ -46,6 +46,5 @@ namespace IrsiUtilities.Application.Tests.Stores.Commands
                 new DeleteStoreCommand { Id = Guid.NewGuid() }, CancellationToken.None
             ));
         }
-
     }
 }

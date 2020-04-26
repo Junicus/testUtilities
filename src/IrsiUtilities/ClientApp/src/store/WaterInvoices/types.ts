@@ -117,7 +117,7 @@ export interface DeleteWaterInvoiceAction {
 export interface DeleteWaterInvoiceSuccessAction {
   type: typeof WaterInvoiceActionTypes.DELETE_WATER_INVOICE_SUCCESS;
   metadata: {
-    invoice: IWaterInvoiceDto;
+    invoiceId: string;
   };
 }
 
