@@ -44,7 +44,7 @@ export function EditWaterInvoicePage() {
   return (
     <div>
       <button onClick={handleBackClick}>Back</button>
-      <h1>Edit Electricity Invoice</h1>
+      <h1>Edit Water Invoice</h1>
       {invoice && (
         <div>
           <EditWaterInvoiceForm initialValues={invoice} onUpdateWaterInvoice={handleWaterInvoiceUpdate} />
